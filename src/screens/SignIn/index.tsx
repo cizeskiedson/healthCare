@@ -1,9 +1,11 @@
 import React from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, TouchableOpacity } from 'react-native'
 import { Button } from 'react-native-elements'
 
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
+
+import { useNavigation } from '@react-navigation/native'
 
 import { Input } from '../../components/Input'
 import { styles } from './styles'
@@ -14,6 +16,8 @@ type FormProps = {
 }
 
 export const SignIn = () => {
+  const navigation = useNavigation()
+
   const handleSubmit = (values: FormProps) => {
     const { email, password } = values
     if (password) {
@@ -37,10 +41,15 @@ export const SignIn = () => {
     onSubmit: values => handleSubmit(values),
   })
 
+  const navigateToSignUp = () => navigation.navigate('SignUp')
+
   return (
     <View style={styles.container}>
       <View>
-        <Text>Não possui cadastro ainda? Cadastre-se.</Text>
+        <Text>Não possui cadastro ainda?</Text>
+        <TouchableOpacity onPress={navigateToSignUp}>
+          <Text>Cadastre-se.</Text>
+        </TouchableOpacity>
       </View>
       <View>
         <Input
