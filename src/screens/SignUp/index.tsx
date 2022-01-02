@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 import { Button } from 'react-native-elements'
 
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 
 import StepIndicator from 'react-native-step-indicator'
 
@@ -10,6 +10,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
 import { FormStep } from './components/FormStep'
+import { UserType } from '../SignIn'
 import { styles, stepStyles } from './styles'
 
 type FormProps = {
@@ -34,10 +35,19 @@ type FormProps = {
   allergies?: string
 }
 
+type RouteParams = {
+  userType: UserType
+}
+
 export const SignUp = () => {
   const [stepPosition, setStepPosition] = useState(0)
 
   const navigation = useNavigation()
+  const route = useRoute()
+
+  const userType = route.params as RouteParams
+
+  console.log(userType)
 
   const handleSubmit = (values: FormProps) => {
     const { cpf } = values

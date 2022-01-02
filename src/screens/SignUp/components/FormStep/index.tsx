@@ -1,7 +1,8 @@
-import React from 'react'
-import { ScrollView } from 'react-native'
+import React, { useState } from 'react'
+import { ScrollView, TouchableOpacity, Text, Platform } from 'react-native'
 
 import { FormikProps } from 'formik'
+import DatePicker, { Event } from '@react-native-community/datetimepicker'
 
 import { Input } from '../../../../components/Input'
 
@@ -13,10 +14,35 @@ type FormStepProps = {
 }
 
 export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
+  const [date, setDate] = useState(new Date())
+  const [show, setShow] = useState(false)
+
+  const onChangeDate = (event: Event, selectedDate: Date) => {
+    const currentDate = selectedDate || date
+
+    setShow(Platform.OS === 'ios')
+    setDate(currentDate)
+  }
+
+  console.log(date)
+
   return (
     <ScrollView style={styles.form}>
       {stepPosition === 0 && (
         <>
+          <TouchableOpacity onPress={() => setShow(true)}>
+            <Text>Open datepicker</Text>
+          </TouchableOpacity>
+
+          {show && (
+            <DatePicker
+              value={date}
+              mode="date"
+              is24Hour
+              display="default"
+              onChange={() => onChangeDate}
+            />
+          )}
           <Input
             name="name"
             label="Nome"
