@@ -9,9 +9,9 @@ import StepIndicator from 'react-native-step-indicator'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-import { FormStep } from './components/FormStep'
 import { UserType } from '../SignIn'
 import { styles, stepStyles } from './styles'
+import { FormStep } from './components/FormStep'
 
 type FormProps = {
   name: string

@@ -48,7 +48,11 @@ export const SignIn = () => {
     setIsVisible(false)
 
     setTimeout(() => {
-      navigation.navigate('SignUp', { userType: userSelectedType })
+      if (userSelectedType === 'patient') {
+        navigation.navigate('SignUp', { userType: userSelectedType })
+      } else {
+        navigation.navigate('SignUpDoc', { userType: userSelectedType })
+      }
     }, 200)
   }
 

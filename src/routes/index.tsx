@@ -10,6 +10,7 @@ declare global {
     interface RootParamList {
       SignIn: undefined
       SignUp: { userType: UserType }
+      SignUpDoc: { userType: UserType }
       Resume: undefined
       History: undefined
       Profile: undefined

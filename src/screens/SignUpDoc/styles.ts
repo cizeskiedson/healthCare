@@ -1,0 +1,19 @@
+import { StyleSheet } from 'react-native'
+
+export const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    paddingHorizontal: 14,
+    paddingVertical: 24,
+  },
+  form: {
+    flex: 1,
+    marginVertical: 40,
+  },
+  options: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+})
