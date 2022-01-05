@@ -1,8 +1,15 @@
 import React, { useState } from 'react'
-import { ScrollView, TouchableOpacity, Text, Platform } from 'react-native'
+import {
+  View,
+  Text,
+  ScrollView,
+  Platform,
+  TouchableOpacity,
+} from 'react-native'
 
 import { FormikProps } from 'formik'
-import DatePicker, { Event } from '@react-native-community/datetimepicker'
+
+import DatePicker from 'react-native-neat-date-picker'
 
 import { Input } from '../../../../components/Input'
 
@@ -14,35 +21,29 @@ type FormStepProps = {
 }
 
 export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
-  const [date, setDate] = useState(new Date())
-  const [show, setShow] = useState(false)
+  const [showDatePicker, setShowDatePicker] = useState(false)
 
-  const onChangeDate = (event: Event, selectedDate: Date) => {
-    const currentDate = selectedDate || date
-
-    setShow(Platform.OS === 'ios')
-    setDate(currentDate)
+  const openDatePicker = () => {
+    setShowDatePicker(true)
   }
 
-  console.log(date)
+  const onCancel = () => {
+    // You should close the modal in here
+    setShowDatePicker(false)
+  }
+
+  const onConfirm = date => {
+    // You should close the modal in here
+    setShowDatePicker(false)
+
+    // The parameter 'date' is a Date object so that you can use any Date prototype method.
+    console.log(date.getDate())
+  }
 
   return (
     <ScrollView style={styles.form}>
       {stepPosition === 0 && (
         <>
-          <TouchableOpacity onPress={() => setShow(true)}>
-            <Text>Open datepicker</Text>
-          </TouchableOpacity>
-
-          {show && (
-            <DatePicker
-              value={date}
-              mode="date"
-              is24Hour
-              display="default"
-              onChange={() => onChangeDate}
-            />
-          )}
           <Input
             name="name"
             label="Nome"
@@ -80,13 +81,33 @@ export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
             maxLength={11}
             keyboardType="numeric"
           />
-
-          <Input
-            name="birthDate"
-            label="Data de Nascimento"
-            placeholder="Digite sua data de nascimento"
-            formik={formik}
-            maxLength={11}
+          <View style={{ marginBottom: 20 }}>
+            <TouchableOpacity
+              style={{
+                paddingVertical: 12,
+                paddingHorizontal: 22,
+                backgroundColor: '#F0FFF4',
+                borderRadius: 8,
+              }}
+              onPress={openDatePicker}
+            >
+              <Text
+                style={{
+                  fontSize: 16,
+                  fontWeight: 'bold',
+                  color: '#38A169',
+                  alignSelf: 'center',
+                }}
+              >
+                Data de Nascimento
+              </Text>
+            </TouchableOpacity>
+          </View>
+          <DatePicker
+            isVisible={showDatePicker}
+            mode={'single'}
+            onCancel={onCancel}
+            onConfirm={onConfirm}
           />
 
           <Input

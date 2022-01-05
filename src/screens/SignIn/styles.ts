@@ -12,4 +12,12 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     letterSpacing: 1,
   },
+  signup: {
+    padding: 5,
+    alignItems: 'center',
+  },
+  signuptext: {
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
 })

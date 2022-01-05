@@ -62,11 +62,10 @@ export const SignIn = () => {
         backgroundColor={isVisible ? 'rgba(0, 0, 0, 0.4)' : '#fff'}
         barStyle="dark-content"
       />
-
-      <View>
+      <View style={styles.signup}>
         <Text>Não possui cadastro ainda?</Text>
         <TouchableOpacity onPress={() => setIsVisible(true)}>
-          <Text>Cadastre-se.</Text>
+          <Text style={styles.signuptext}>Cadastre-se.</Text>
         </TouchableOpacity>
       </View>
       <View>
@@ -83,7 +82,26 @@ export const SignIn = () => {
           secureTextEntry
           formik={formik}
         />
-        <Button title="Entrar" onPress={() => formik.handleSubmit()} />
+        <TouchableOpacity
+          style={{
+            paddingVertical: 12,
+            paddingHorizontal: 22,
+            backgroundColor: '#F0FFF4',
+            borderRadius: 8,
+          }}
+          onPress={() => formik.handleSubmit()}
+        >
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: 'bold',
+              color: '#38A169',
+              alignSelf: 'center',
+            }}
+          >
+            Entrar
+          </Text>
+        </TouchableOpacity>
       </View>
 
       <Modal visible={isVisible} transparent style={{}}>

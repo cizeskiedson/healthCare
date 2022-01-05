@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, TouchableOpacity } from 'react-native'
 import { Button } from 'react-native-elements'
 
 import { useNavigation, useRoute } from '@react-navigation/native'
@@ -127,10 +127,26 @@ export const SignUp = () => {
           }}
         />
 
-        <Button
-          title="Continuar"
+        <TouchableOpacity
+          style={{
+            paddingVertical: 12,
+            paddingHorizontal: 22,
+            backgroundColor: '#F0FFF4',
+            borderRadius: 8,
+          }}
           onPress={() => setStepPosition(oldValue => oldValue + 1)}
-        />
+        >
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: 'bold',
+              color: '#38A169',
+              alignSelf: 'center',
+            }}
+          >
+            Continuar
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   )
