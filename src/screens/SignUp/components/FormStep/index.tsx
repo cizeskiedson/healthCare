@@ -192,6 +192,44 @@ export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
           />
         </>
       )}
+      {stepPosition === 3 && (
+        <>
+          <Text style={styles.header}>
+            {' '}
+            Antes de concluir o cadastro, é necessário associar um contato de
+            confiança para a sua conta.
+          </Text>
+          <Input
+            name="nameC"
+            label="Nome"
+            placeholder="Digite o nome"
+            formik={formik}
+          />
+          <Input
+            name="cpfC"
+            label="CPF"
+            placeholder="Digite o cpf"
+            formik={formik}
+            maxLength={11}
+            keyboardType="numeric"
+          />
+          <Input
+            name="emailC"
+            label="E-mail"
+            placeholder="Digite o email"
+            formik={formik}
+          />
+
+          <Input
+            name="phoneC"
+            label="Telefone"
+            placeholder="Digite o telefone"
+            formik={formik}
+            maxLength={11}
+            keyboardType="numeric"
+          />
+        </>
+      )}
     </ScrollView>
   )
 }

@@ -5,4 +5,9 @@ export const styles = StyleSheet.create({
     flex: 1,
     marginVertical: 40,
   },
+  header: {
+    padding: 5,
+    textAlign: 'center',
+    marginBottom: 8,
+  },
 })

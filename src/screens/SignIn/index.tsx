@@ -8,6 +8,7 @@ import * as Yup from 'yup'
 import { useNavigation } from '@react-navigation/native'
 
 import { Input } from '../../components/Input'
+import api from '../../services/api'
 import { styles } from './styles'
 
 type FormProps = {
@@ -21,13 +22,19 @@ export const SignIn = () => {
   const navigation = useNavigation()
   const [isVisible, setIsVisible] = useState(false)
 
-  const handleSubmit = (values: FormProps) => {
+  const handleSubmit = async (values: FormProps) => {
     const { email, password } = values
     if (password) {
-      console.log('senha fornecida.')
-      return
+      try {
+        const response = await api.post('/users/login', { email, password })
+        console.log(response)
+        navigation.navigate('Resume')
+      } catch (error) {
+        console.log(error)
+      }
+    } else {
+      console.log('senha n fornecida.')
     }
-    console.log('senha n fornecida.')
   }
 
   const formik = useFormik<FormProps>({
