@@ -80,7 +80,7 @@ export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
               style={{
                 paddingVertical: 12,
                 paddingHorizontal: 22,
-                backgroundColor: '#F0FFF4',
+                backgroundColor: '#1dd3f8',
                 borderRadius: 8,
               }}
               onPress={openDatePicker}
@@ -89,7 +89,7 @@ export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
                 style={{
                   fontSize: 16,
                   fontWeight: 'bold',
-                  color: '#38A169',
+                  color: '#00042c',
                   alignSelf: 'center',
                 }}
               >

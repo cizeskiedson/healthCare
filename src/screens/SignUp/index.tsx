@@ -131,6 +131,7 @@ export const SignUp = () => {
         <Button
           title={stepPosition === 0 ? 'Voltar ao login' : 'Voltar'}
           type="clear"
+          titleStyle={{ color: '#00042c' }}
           onPress={() => {
             if (stepPosition === 0) {
               navigation.goBack()
@@ -145,7 +146,7 @@ export const SignUp = () => {
           style={{
             paddingVertical: 12,
             paddingHorizontal: 22,
-            backgroundColor: '#F0FFF4',
+            backgroundColor: '#1dd3f8',
             borderRadius: 8,
           }}
           onPress={() => setStepPosition(oldValue => oldValue + 1)}
@@ -154,11 +155,11 @@ export const SignUp = () => {
             style={{
               fontSize: 16,
               fontWeight: 'bold',
-              color: '#38A169',
+              color: '#00042c',
               alignSelf: 'center',
             }}
           >
-            Continuar
+            {stepPosition === 3 ? 'Salvar' : 'Continuar'}
           </Text>
         </TouchableOpacity>
       </View>

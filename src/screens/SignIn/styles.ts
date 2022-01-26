@@ -6,6 +6,10 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 14,
   },
+  content: {
+    flex: 1,
+  },
+  footer: { height: 100 },
   title: {},
   text: {
     fontSize: 25,
@@ -19,5 +23,11 @@ export const styles = StyleSheet.create({
   signuptext: {
     fontSize: 15,
     fontWeight: 'bold',
+    color: '#959595',
+  },
+  logo: {
+    width: undefined,
+    height: undefined,
+    flex: 0.56,
   },
 })

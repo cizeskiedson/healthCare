@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button } from 'react-native-elements'
-import { ScrollView, View } from 'react-native'
+import { ScrollView, View, TouchableOpacity, Text } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 
 import { useFormik } from 'formik'
@@ -100,11 +100,30 @@ export const SignUpDoc = () => {
         <Button
           title={'Voltar ao login'}
           type="clear"
+          titleStyle={{ color: '#00042c' }}
           onPress={() => {
             navigation.goBack()
           }}
         />
-        <Button title="Salvar" onPress={() => handleSubmit()} />
+        <TouchableOpacity
+          style={{
+            paddingVertical: 12,
+            paddingHorizontal: 22,
+            backgroundColor: '#1dd3f8',
+            borderRadius: 8,
+          }}
+        >
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: 'bold',
+              color: '#00042c',
+              alignSelf: 'center',
+            }}
+          >
+            Salvar
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   )

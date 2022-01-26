@@ -9,5 +9,6 @@ export const styles = StyleSheet.create({
     padding: 5,
     textAlign: 'center',
     marginBottom: 8,
+    color: '#959595',
   },
 })
