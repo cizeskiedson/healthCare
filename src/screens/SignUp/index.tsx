@@ -33,6 +33,10 @@ type FormProps = {
   weight?: number | null
   observations?: string
   allergies?: string
+  nameC: string
+  cpfC: string
+  emailC: string
+  phoneC?: string
 }
 
 type RouteParams = {
@@ -75,6 +79,10 @@ export const SignUp = () => {
       observations: '',
       allergies: '',
       password: '',
+      nameC: '',
+      cpfC: '',
+      emailC: '',
+      phoneC: '',
     },
     validationSchema: Yup.object().shape({
       name: Yup.string().required(),
@@ -98,6 +106,12 @@ export const SignUp = () => {
       observations: Yup.string(),
       allergies: Yup.string(),
       password: Yup.string().required(),
+      nameC: Yup.string().required(),
+      cpfC: Yup.string()
+        .matches(/^\d{3}\d{3}\d{3}\d{2}$/, 'CPF inválido.')
+        .required('CPF é um campo obrigatório.'),
+      emailC: Yup.string().required(),
+      phoneC: Yup.string(),
     }),
     onSubmit: values => handleSubmit(values),
   })
