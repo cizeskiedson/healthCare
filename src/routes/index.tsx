@@ -1,9 +1,12 @@
 import React from 'react'
+import AppLoading from 'expo-app-loading'
 import { NavigationContainer } from '@react-navigation/native'
 
 import { AuthRoutes } from './auth.routes'
 import { AppRoutes } from './app.routes'
 import { UserType } from '../screens/SignIn'
+
+import { useAuth } from '../context/auth'
 
 declare global {
   namespace ReactNavigation {
@@ -14,14 +17,20 @@ declare global {
       Resume: undefined
       History: undefined
       Profile: undefined
+      ViewDoc: undefined
+      ViewConfianca: undefined
     }
   }
 }
 
-export const Routes = () => (
-  <NavigationContainer>
-    <AuthRoutes />
-    {/* 
-    <AppRoutes /> */}
-  </NavigationContainer>
-)
+export const Routes = () => {
+  const { signed, loading, user } = useAuth()
+  if (loading) {
+    return <AppLoading />
+  }
+  return (
+    <NavigationContainer>
+      {signed ? <AppRoutes realm={user ? user.realm : ''} /> : <AuthRoutes />}
+    </NavigationContainer>
+  )
+}

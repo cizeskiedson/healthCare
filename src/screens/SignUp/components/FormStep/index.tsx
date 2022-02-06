@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 
 import { FormikProps } from 'formik'
 
-import DatePicker from 'react-native-neat-date-picker'
+import DateTimePickerModal from 'react-native-modal-datetime-picker'
 
 import { Input } from '../../../../components/Input'
 
@@ -15,23 +15,19 @@ type FormStepProps = {
 }
 
 export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
-  const [showDatePicker, setShowDatePicker] = useState(false)
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
 
-  const openDatePicker = () => {
-    setShowDatePicker(true)
+  const showDatePicker = () => {
+    setDatePickerVisibility(true)
   }
 
-  const onCancel = () => {
-    // You should close the modal in here
-    setShowDatePicker(false)
+  const hideDatePicker = () => {
+    setDatePickerVisibility(false)
   }
 
-  const onConfirm = date => {
-    // You should close the modal in here
-    setShowDatePicker(false)
-
-    // The parameter 'date' is a Date object so that you can use any Date prototype method.
-    console.log(date.getDate())
+  const handleConfirm = date => {
+    formik.setFieldValue('birthDate', date.toISOString().substring(0, 10))
+    hideDatePicker()
   }
 
   return (
@@ -45,7 +41,7 @@ export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
             formik={formik}
           />
           <Input
-            name="cpf"
+            name="cpfString"
             label="CPF"
             placeholder="Digite seu cpf"
             formik={formik}
@@ -83,7 +79,7 @@ export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
                 backgroundColor: '#1dd3f8',
                 borderRadius: 8,
               }}
-              onPress={openDatePicker}
+              onPress={showDatePicker}
             >
               <Text
                 style={{
@@ -97,13 +93,12 @@ export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
               </Text>
             </TouchableOpacity>
           </View>
-          <DatePicker
-            isVisible={showDatePicker}
-            mode={'single'}
-            onCancel={onCancel}
-            onConfirm={onConfirm}
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleConfirm}
+            onCancel={hideDatePicker}
           />
-
           <Input
             name="password"
             label="Senha"
@@ -116,26 +111,26 @@ export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
       {stepPosition === 1 && (
         <>
           <Input
-            name="street"
+            name="addressObject.street"
             label="Endereço"
             placeholder="Digite seu endereço"
             formik={formik}
           />
           <Input
-            name="number"
+            name="addressObject.number"
             label="Número"
             placeholder="Digite o número"
             formik={formik}
             keyboardType="numeric"
           />
           <Input
-            name="neighborhood"
+            name="addressObject.neighborhood"
             label="Bairro"
             placeholder="Digite seu bairro"
             formik={formik}
           />
           <Input
-            name="zipCode"
+            name="addressObject.zipCode"
             label="CEP"
             placeholder="Digite seu CEP"
             formik={formik}

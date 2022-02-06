@@ -6,6 +6,7 @@ import { useNavigation, useRoute } from '@react-navigation/native'
 
 import StepIndicator from 'react-native-step-indicator'
 
+import { useAuth } from '../../context/auth'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
@@ -13,16 +14,18 @@ import { UserType } from '../SignIn'
 import { styles, stepStyles } from './styles'
 import { FormStep } from './components/FormStep'
 
+import api from '../../services/api'
+
 type FormProps = {
   name: string
-  cpf: string
+  cpfString: string /* x */
   email: string
   age?: number | null
-  phone?: string
-  birthDate?: Date | null
+  phone?: number | null
+  birthDate?: string /*  x */
   password: string
-  address: {
-    street: string
+  addressObject: {
+    /* x Object -> string */ street: string
     number: number | null
     neighborhood: string
     zipCode: string
@@ -34,9 +37,9 @@ type FormProps = {
   observations?: string
   allergies?: string
   nameC: string
-  cpfC: string
+  cpfC: string /* x */
   emailC: string
-  phoneC?: string
+  phoneC?: number | null
 }
 
 type RouteParams = {
@@ -46,32 +49,99 @@ type RouteParams = {
 export const SignUp = () => {
   const [stepPosition, setStepPosition] = useState(0)
 
+  const { signIn } = useAuth()
   const navigation = useNavigation()
   const route = useRoute()
 
   const userType = route.params as RouteParams
 
-  console.log(userType)
+  const handleOnSubmit = async (values: FormProps) => {
+    console.log('welcome')
+    const realm = 'pacient'
+    const {
+      name,
+      cpfString,
+      email,
+      password,
+      birthDate,
+      addressObject,
+      bloodType,
+      healthProblems,
+      observations,
+      allergies,
+      nameC,
+      cpfC,
+      emailC,
+    } = values
+    let { age, phone, height, weight, phoneC } = values
+    let cpf = Number(cpfString)
+    age = Number(age)
+    phone = Number(phone)
+    height = Number(height)
+    weight = Number(weight)
+    phoneC = Number(phoneC)
+    const address =
+      addressObject.street +
+      ', ' +
+      addressObject.number +
+      ' - ' +
+      addressObject.neighborhood +
+      ', CEP: ' +
+      addressObject.zipCode
 
-  const handleSubmit = (values: FormProps) => {
-    const { cpf } = values
-    console.log(cpf)
+    try {
+      await api.post('signup', {
+        email,
+        password,
+        realm,
+      })
+      await signIn(email, password)
+      await api.post('pacientes', {
+        name,
+        email,
+        cpf,
+        address,
+        age,
+        phone,
+        birthDate,
+        bloodType,
+        healthProblems,
+        height,
+        weight,
+        observations,
+        allergies,
+        password,
+      })
+      cpf = Number(cpfC)
+      await api.post('confiancas', {
+        name: nameC,
+        cpf,
+        email: emailC,
+        phone: phoneC,
+      })
+      await api.post('pcs', {
+        idPaciente: Number(cpfString),
+        idConfianca: Number(cpfC),
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const formik = useFormik<FormProps>({
     initialValues: {
       name: '',
       email: '',
-      cpf: '',
-      address: {
+      cpfString: '',
+      addressObject: {
         street: '',
         number: null,
         neighborhood: '',
         zipCode: '',
       },
       age: null,
-      phone: '',
-      birthDate: null,
+      phone: null,
+      birthDate: '',
       bloodType: '',
       healthProblems: '',
       height: null,
@@ -82,23 +152,23 @@ export const SignUp = () => {
       nameC: '',
       cpfC: '',
       emailC: '',
-      phoneC: '',
+      phoneC: null,
     },
     validationSchema: Yup.object().shape({
       name: Yup.string().required(),
-      cpf: Yup.string()
+      cpfString: Yup.string()
         .matches(/^\d{3}\d{3}\d{3}\d{2}$/, 'CPF inválido.')
         .required('CPF é um campo obrigatório.'),
       email: Yup.string().required(),
-      address: Yup.object().shape({
+      addressObject: Yup.object().shape({
         street: Yup.string().required(),
         number: Yup.number().required(),
         neighborhood: Yup.string().required(),
         zipCode: Yup.string().required(),
       }),
       age: Yup.number(),
-      phone: Yup.string(),
-      birthDate: Yup.date(),
+      phone: Yup.number(),
+      birthDate: Yup.string(),
       bloodType: Yup.string(),
       healthProblems: Yup.string(),
       height: Yup.number(),
@@ -111,9 +181,9 @@ export const SignUp = () => {
         .matches(/^\d{3}\d{3}\d{3}\d{2}$/, 'CPF inválido.')
         .required('CPF é um campo obrigatório.'),
       emailC: Yup.string().required(),
-      phoneC: Yup.string(),
+      phoneC: Yup.number(),
     }),
-    onSubmit: values => handleSubmit(values),
+    onSubmit: values => handleOnSubmit(values),
   })
 
   return (
@@ -149,7 +219,14 @@ export const SignUp = () => {
             backgroundColor: '#1dd3f8',
             borderRadius: 8,
           }}
-          onPress={() => setStepPosition(oldValue => oldValue + 1)}
+          onPress={() => {
+            if (stepPosition === 3) {
+              /* console.log(formik.values) */
+              formik.handleSubmit()
+            } else {
+              setStepPosition(oldValue => oldValue + 1)
+            }
+          }}
         >
           <Text
             style={{

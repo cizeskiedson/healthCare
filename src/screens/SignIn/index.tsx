@@ -7,17 +7,18 @@ import {
   Modal,
   StatusBar,
 } from 'react-native'
-import { Button } from 'react-native-elements'
 
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
 import { useNavigation } from '@react-navigation/native'
 
+import { useAuth } from '../../context/auth'
+
 import { Input } from '../../components/Input'
 import api from '../../services/api'
 import { styles } from './styles'
-import { logoIoT } from '../../../Images'
+import logoIoT from '../../assets/logo.png'
 
 type FormProps = {
   email: string
@@ -28,21 +29,31 @@ export type UserType = 'patient' | 'doctor'
 
 export const SignIn = () => {
   const navigation = useNavigation()
+  const { signIn } = useAuth()
   const [isVisible, setIsVisible] = useState(false)
 
-  const handleSubmit = async (values: FormProps) => {
+  const handleOnSignIn = async (values: FormProps) => {
     const { email, password } = values
     if (password) {
       try {
-        const response = await api.post('/users/login', { email, password })
-        console.log(response)
-        navigation.navigate('Resume')
+        const response = await signIn(email, password)
       } catch (error) {
         console.log(error)
       }
     } else {
-      console.log('senha n fornecida.')
+      console.log('FAZER ESSA PARTE')
     }
+
+    // if (password) {
+    // try {
+    // const response = await api.post('/users/login', { email, password })
+    // console.log(response.data)
+    // } catch (error) {
+    // console.log(error)
+    // }
+    // } else {
+    // console.log('senha n fornecida.')
+    // }
   }
 
   const formik = useFormik<FormProps>({
@@ -56,7 +67,7 @@ export const SignIn = () => {
         .required('E-mail é um campo obrigatório.'),
       password: Yup.string(),
     }),
-    onSubmit: values => handleSubmit(values),
+    onSubmit: values => handleOnSignIn(values),
   })
 
   const navigateToSignUp = (userSelectedType: UserType) => {
@@ -120,7 +131,12 @@ export const SignIn = () => {
           </TouchableOpacity>
         </View>
 
-        <Modal visible={isVisible} transparent style={{}}>
+        <Modal
+          visible={isVisible}
+          transparent
+          style={{}}
+          onRequestClose={() => setIsVisible(false)}
+        >
           <View
             style={{
               flex: 1,

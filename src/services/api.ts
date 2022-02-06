@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: 'http://192.168.0.22:3000/',
+  baseURL: 'https://healthcare-tcc.herokuapp.com/',
 })
+
 export default api

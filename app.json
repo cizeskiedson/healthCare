@@ -1,5 +1,6 @@
 {
   "expo": {
+    "userInterfaceStyle": "automatic",
     "name": "healthCare",
     "slug": "healthCare",
     "version": "1.0.0",
@@ -28,5 +29,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     }
+    
   }
 }
