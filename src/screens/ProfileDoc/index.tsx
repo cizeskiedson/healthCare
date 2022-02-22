@@ -7,7 +7,7 @@ import { styles } from './styles'
 import { useAuth } from '../../context/auth'
 import { Feather } from '@expo/vector-icons'
 
-export const Profile = () => {
+export const ProfileDoc = () => {
   const { user } = useAuth()
   const handleOnFillForms = async () => {
     let email = ''
@@ -15,7 +15,7 @@ export const Profile = () => {
       email = user.email
     }
     try {
-      const url = '/pacientes/' + email
+      const url = '/medicos/' + email
       const response = await api.get(url)
       setData(response.data)
     } catch (error) {
@@ -122,12 +122,11 @@ export const Profile = () => {
           />
 
           <Input
-            name="age"
-            label="Idade"
-            placeholder="Digite sua idade"
-            keyboardType="numeric"
+            name="crm"
+            label="CRM"
+            placeholder="Digite seu CRM"
             editable={edit}
-            value={data.age}
+            value={data.crm}
           />
 
           <Input
@@ -140,62 +139,11 @@ export const Profile = () => {
             value={data.phone}
           />
           <Input
-            name="address"
-            label="Endereço"
-            placeholder="Digite seu endereço"
+            name="area"
+            label="Area"
+            placeholder="Digite sua área"
             editable={edit}
-            value={data.address}
-          />
-          <Input
-            name="bloodType"
-            label="Tipo Sanguíneo"
-            placeholder="Digite seu tipo sanguíneo"
-            maxLength={3}
-            editable={edit}
-            value={data.bloodType}
-          />
-          <Input
-            multiline
-            numberOfLines={4}
-            name="healthProblems"
-            label="Problemas de Saúde"
-            placeholder="Informe seus problemas de saúde"
-            editable={edit}
-            value={data.healthProblems}
-          />
-          <Input
-            name="height"
-            label="Altura"
-            placeholder="Digite sua altura"
-            keyboardType="numeric"
-            editable={edit}
-            value={data.height}
-          />
-          <Input
-            name="weight"
-            label="Peso"
-            placeholder="Digite seu peso"
-            keyboardType="numeric"
-            editable={edit}
-            value={data.weight}
-          />
-          <Input
-            multiline
-            numberOfLines={4}
-            name="allergies"
-            label="Alergias"
-            placeholder="Informe suas alergias"
-            editable={edit}
-            value={data.allergies}
-          />
-          <Input
-            multiline
-            numberOfLines={4}
-            name="observations"
-            label="Observações"
-            placeholder="Algo mais?"
-            editable={edit}
-            value={data.observations}
+            value={data.area}
           />
         </ScrollView>
         <Modal visible={isVisible} transparent style={{}}>

@@ -18,7 +18,7 @@ import api from '../../services/api'
 
 type FormProps = {
   name: string
-  cpfString: string /* x */
+  cpf: string /* x */
   email: string
   age?: number | null
   phone?: number | null
@@ -60,7 +60,11 @@ export const SignUp = () => {
     const realm = 'pacient'
     const {
       name,
-      cpfString,
+      cpf,
+      age,
+      phone,
+      height,
+      weight,
       email,
       password,
       birthDate,
@@ -72,14 +76,9 @@ export const SignUp = () => {
       nameC,
       cpfC,
       emailC,
+      phoneC,
     } = values
-    let { age, phone, height, weight, phoneC } = values
-    let cpf = Number(cpfString)
-    age = Number(age)
-    phone = Number(phone)
-    height = Number(height)
-    weight = Number(weight)
-    phoneC = Number(phoneC)
+    console.log(values)
     const address =
       addressObject.street +
       ', ' +
@@ -110,18 +109,17 @@ export const SignUp = () => {
         weight,
         observations,
         allergies,
-        password,
-      })
-      cpf = Number(cpfC)
+      }) /* 
+      cpf = Number(cpfC) */
       await api.post('confiancas', {
         name: nameC,
-        cpf,
+        cpf: cpfC,
         email: emailC,
         phone: phoneC,
       })
       await api.post('pcs', {
-        idPaciente: Number(cpfString),
-        idConfianca: Number(cpfC),
+        emailPaciente: email,
+        emailConfianca: emailC,
       })
     } catch (error) {
       console.log(error)
@@ -132,7 +130,7 @@ export const SignUp = () => {
     initialValues: {
       name: '',
       email: '',
-      cpfString: '',
+      cpf: '',
       addressObject: {
         street: '',
         number: null,
@@ -156,7 +154,7 @@ export const SignUp = () => {
     },
     validationSchema: Yup.object().shape({
       name: Yup.string().required(),
-      cpfString: Yup.string()
+      cpf: Yup.string()
         .matches(/^\d{3}\d{3}\d{3}\d{2}$/, 'CPF inválido.')
         .required('CPF é um campo obrigatório.'),
       email: Yup.string().required(),

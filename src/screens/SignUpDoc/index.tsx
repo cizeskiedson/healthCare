@@ -13,10 +13,10 @@ import api from '../../services/api'
 
 type FormProps = {
   name: string
-  cpfString: string
+  cpf: string
   crm: string
   email: string
-  phoneString: string
+  phone: string
   area: string
   password: string
 }
@@ -28,9 +28,7 @@ export const SignUpDoc = () => {
 
   const handleOnSubmit = async (values: FormProps) => {
     console.log('teste')
-    const { name, cpfString, crm, email, phoneString, area, password } = values
-    const cpf = Number(cpfString)
-    const phone = Number(phoneString)
+    const { name, cpf, crm, email, phone, area, password } = values
     const realm = 'doctor'
     try {
       await api.post('signup', {
@@ -55,23 +53,23 @@ export const SignUpDoc = () => {
   const formik = useFormik<FormProps>({
     initialValues: {
       name: '',
-      cpfString: '',
+      cpf: '',
       crm: '',
       email: '',
-      phoneString: '',
+      phone: '',
       area: '',
       password: '',
     },
     validationSchema: Yup.object().shape({
       name: Yup.string().required(),
-      cpfString: Yup.string()
+      cpf: Yup.string()
         .matches(/^\d{3}\d{3}\d{3}\d{2}$/, 'CPF inválido.')
         .required('CPF é um campo obrigatório.'),
       crm: Yup.string()
         .matches(/^\d{3}\d{3}\d{3}\d{2}$/, 'CRM inválido.')
         .required('CRM é um campo obrigatório.'),
       email: Yup.string().required(),
-      phoneString: Yup.number(),
+      phone: Yup.number(),
       area: Yup.string(),
       password: Yup.string().required(),
     }),
@@ -88,7 +86,7 @@ export const SignUpDoc = () => {
           formik={formik}
         />
         <Input
-          name="cpfString"
+          name="cpf"
           label="CPF"
           placeholder="Digite seu CPF"
           maxLength={11}
@@ -110,7 +108,7 @@ export const SignUpDoc = () => {
         />
 
         <Input
-          name="phoneString"
+          name="phone"
           label="Telefone"
           placeholder="Digite seu telefone"
           maxLength={11}

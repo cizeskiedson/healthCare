@@ -41,7 +41,7 @@ export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
             formik={formik}
           />
           <Input
-            name="cpfString"
+            name="cpf"
             label="CPF"
             placeholder="Digite seu cpf"
             formik={formik}

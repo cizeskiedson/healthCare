@@ -7,6 +7,8 @@ import { Resume } from '../screens/Resume'
 import { History } from '../screens/History'
 import { Profile } from '../screens/Profile'
 import { ViewDoc } from '../screens/ViewDoc'
+import { ProfileDoc } from '../screens/ProfileDoc'
+import { Search } from '../screens/Search'
 import { Text } from 'react-native'
 
 const { Navigator, Screen } = createBottomTabNavigator()
@@ -19,9 +21,10 @@ const icons: Record<string, string> = {
 }
 
 type AppProps = {
+  id: string
   realm: string
 }
-export const AppRoutes = ({ realm }: AppProps) => {
+export const AppRoutes = ({ id, realm }: AppProps) => {
   if (realm === 'pacient') {
     return (
       <Navigator
@@ -47,7 +50,7 @@ export const AppRoutes = ({ realm }: AppProps) => {
       >
         <Screen name="Resumo" component={Resume} />
         <Screen name="Histórico" component={History} />
-        <Screen name="Perfil" component={Profile} />
+        <Screen name="Perfil" component={Profile} initialParams={{ id: id }} />
       </Navigator>
     )
   } else {
@@ -74,7 +77,7 @@ export const AppRoutes = ({ realm }: AppProps) => {
         })}
       >
         <Screen name="Pacientes" component={ViewDoc} />
-        <Screen name="Perfil" component={Profile} />
+        <Screen name="Perfil" component={ProfileDoc} />
       </Navigator>
     )
   }

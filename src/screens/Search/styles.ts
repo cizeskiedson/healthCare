@@ -6,13 +6,4 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     paddingHorizontal: 14,
   },
-  touchable: {
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    paddingHorizontal: 14,
-    paddingVertical: 24,
-  },
-  content: {
-    flex: 1,
-  },
 })

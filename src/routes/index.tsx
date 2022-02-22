@@ -17,8 +17,10 @@ declare global {
       Resume: undefined
       History: undefined
       Profile: undefined
+      ProfileDoc: undefined
       ViewDoc: undefined
       ViewConfianca: undefined
+      Search: undefined
     }
   }
 }
@@ -30,7 +32,11 @@ export const Routes = () => {
   }
   return (
     <NavigationContainer>
-      {signed ? <AppRoutes realm={user ? user.realm : ''} /> : <AuthRoutes />}
+      {signed ? (
+        <AppRoutes id={user ? user.id : ''} realm={user ? user.realm : ''} />
+      ) : (
+        <AuthRoutes />
+      )}
     </NavigationContainer>
   )
 }
