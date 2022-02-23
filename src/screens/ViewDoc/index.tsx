@@ -14,7 +14,7 @@ import api from '../../services/api'
 const numberOfItemsPerPageList = [2, 3, 4]
 
 export const ViewDoc = () => {
-  const { user } = useAuth()
+  const { user, signOut } = useAuth()
   const navigation = useNavigation()
   let email = ''
   if (user != null) {
