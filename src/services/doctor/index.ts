@@ -23,3 +23,9 @@ export const getPatientsByDoctor = async (
 
   return data
 }
+
+export const getPatients = async (): Promise<Patient[]> => {
+  const { data } = await api.get('pacientes')
+
+  return data
+}

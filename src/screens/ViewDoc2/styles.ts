@@ -7,10 +7,13 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 14,
   },
   touchable: {
-    backgroundColor: '#fff',
+    backgroundColor: '#00042C',
     justifyContent: 'center',
+    borderRadius: 8,
     paddingHorizontal: 14,
-    paddingVertical: 24,
+    paddingVertical: 20,
+    marginBottom: 10,
+    marginTop: 10,
   },
   content: {
     flex: 1,

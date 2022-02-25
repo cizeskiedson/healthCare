@@ -8,11 +8,11 @@ import { Resume } from '../screens/Resume'
 import { History } from '../screens/History'
 import { Profile } from '../screens/Profile'
 // import { ViewDoc2 } from '../screens/ViewDoc2'
-import { ViewDoc } from '../screens/ViewDoc'
+import { ViewDoc2 } from '../screens/ViewDoc2'
 import { ProfileDoc } from '../screens/ProfileDoc'
 import { Search } from '../screens/Search'
-import { Text } from 'react-native'
-import App from '../../App'
+import { CreatePatient } from '../screens/CreatePatient'
+import { ViewPatientData } from '../screens/ViewPatientData'
 
 const AppTab = createBottomTabNavigator()
 const AppStack = createNativeStackNavigator()
@@ -64,7 +64,7 @@ const Tabs = ({ id, realm }: AppProps) => {
         </>
       ) : (
         <>
-          <AppTab.Screen name="Pacientes" component={ViewDoc} />
+          <AppTab.Screen name="Pacientes" component={ViewDoc2} />
           <AppTab.Screen name="Perfil" component={ProfileDoc} />
         </>
       )}
@@ -73,8 +73,23 @@ const Tabs = ({ id, realm }: AppProps) => {
 }
 
 export const AppRoutes = () => (
-  <AppStack.Navigator>
-    <AppStack.Screen name="Resumo" component={Tabs} />
+  <AppStack.Navigator screenOptions={{ headerShown: false }}>
+    <AppStack.Screen name="Home" component={Tabs} />
+    <AppStack.Screen
+      name="Search"
+      component={Search}
+      options={{ headerShown: true, headerTitle: 'Buscar usuário' }}
+    />
+    <AppStack.Screen
+      name="CreatePatient"
+      component={CreatePatient}
+      options={{ headerShown: true, headerTitle: 'Cadastrar paciente' }}
+    />
+    <AppStack.Screen
+      name="ViewPatientData"
+      component={ViewPatientData}
+      options={{ headerShown: true, headerTitle: 'Informações do paciente' }}
+    />
   </AppStack.Navigator>
 )
 

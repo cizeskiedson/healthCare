@@ -21,6 +21,8 @@ declare global {
       ViewDoc: undefined
       ViewConfianca: undefined
       Search: undefined
+      CreatePatient: undefined
+      ViewPatientData: undefined
     }
   }
 }
