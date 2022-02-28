@@ -28,17 +28,13 @@ declare global {
 }
 
 export const Routes = () => {
-  const { signed, loading, user } = useAuth()
+  const { signed, loading } = useAuth()
   if (loading) {
     return <AppLoading />
   }
   return (
     <NavigationContainer>
-      {signed ? (
-        <AppRoutes id={user ? user.id : ''} realm={user ? user.realm : ''} />
-      ) : (
-        <AuthRoutes />
-      )}
+      {signed ? <AppRoutes /> : <AuthRoutes />}
     </NavigationContainer>
   )
 }

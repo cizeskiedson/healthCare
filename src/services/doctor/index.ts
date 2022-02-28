@@ -16,6 +16,15 @@ export type Patient = {
   weight: string
 }
 
+export type Doctor = {
+  crm: string
+  cpf: string
+  email: string
+  name: string
+  phone: string
+  area: string
+}
+
 export const getPatientsByDoctor = async (
   doctorEmail: string
 ): Promise<Patient[]> => {

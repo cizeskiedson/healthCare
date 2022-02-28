@@ -57,7 +57,7 @@ export const SignUp = () => {
 
   const handleOnSubmit = async (values: FormProps) => {
     console.log('welcome')
-    const realm = 'pacient'
+    const realm = 'patient'
     const {
       name,
       cpf,
