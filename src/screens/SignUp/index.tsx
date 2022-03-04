@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
 import { Button } from 'react-native-elements'
 
-import { useNavigation, useRoute } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 
 import StepIndicator from 'react-native-step-indicator'
 
@@ -10,11 +10,11 @@ import { useAuth } from '../../context/auth'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 
-import { UserType } from '../SignIn'
 import { styles, stepStyles } from './styles'
 import { FormStep } from './components/FormStep'
 
 import api from '../../services/api'
+import { showMessage } from 'react-native-flash-message'
 
 type FormProps = {
   name: string
@@ -22,7 +22,6 @@ type FormProps = {
   email: string
   age?: number | null
   phone?: number | null
-  birthDate?: string /*  x */
   password: string
   addressObject: {
     /* x Object -> string */ street: string
@@ -42,18 +41,11 @@ type FormProps = {
   phoneC?: number | null
 }
 
-type RouteParams = {
-  userType: UserType
-}
-
 export const SignUp = () => {
   const [stepPosition, setStepPosition] = useState(0)
 
   const { signIn } = useAuth()
   const navigation = useNavigation()
-  const route = useRoute()
-
-  const userType = route.params as RouteParams
 
   const handleOnSubmit = async (values: FormProps) => {
     console.log('welcome')
@@ -67,7 +59,6 @@ export const SignUp = () => {
       weight,
       email,
       password,
-      birthDate,
       addressObject,
       bloodType,
       healthProblems,
@@ -94,6 +85,11 @@ export const SignUp = () => {
         password,
         realm,
       })
+      const a = await api.post('signup', {
+        email: emailC,
+        password: '123senha',
+        realm: 'temp',
+      })
       await signIn(email, password)
       await api.post('pacientes', {
         name,
@@ -102,15 +98,13 @@ export const SignUp = () => {
         address,
         age,
         phone,
-        birthDate,
         bloodType,
         healthProblems,
         height,
         weight,
         observations,
         allergies,
-      }) /* 
-      cpf = Number(cpfC) */
+      })
       await api.post('confiancas', {
         name: nameC,
         cpf: cpfC,
@@ -121,7 +115,18 @@ export const SignUp = () => {
         emailPaciente: email,
         emailConfianca: emailC,
       })
+      console.log(a)
+      showMessage({
+        message: 'Sucesso!',
+        description: 'Conta criada com sucesso!',
+        type: 'success',
+      })
     } catch (error) {
+      showMessage({
+        message: 'Oops!',
+        description: 'Não conseguimos terminar seu cadastro!',
+        type: 'danger',
+      })
       console.log(error)
     }
   }
@@ -139,7 +144,6 @@ export const SignUp = () => {
       },
       age: null,
       phone: null,
-      birthDate: '',
       bloodType: '',
       healthProblems: '',
       height: null,
@@ -166,7 +170,6 @@ export const SignUp = () => {
       }),
       age: Yup.number(),
       phone: Yup.number(),
-      birthDate: Yup.string(),
       bloodType: Yup.string(),
       healthProblems: Yup.string(),
       height: Yup.number(),

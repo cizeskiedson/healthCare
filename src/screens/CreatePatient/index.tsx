@@ -21,7 +21,6 @@ type FormProps = {
   email: string
   age?: number | null
   phone?: number | null
-  birthDate?: string /*  x */
   password: string
   addressObject: {
     street: string
@@ -47,7 +46,7 @@ export const CreatePatient = () => {
   const { user } = useAuth()
   const handleOnSubmit = async (values: FormProps) => {
     console.log('welcome')
-    const realm = 'pacient'
+    const realm = 'patient'
     const {
       name,
       cpf,
@@ -57,7 +56,6 @@ export const CreatePatient = () => {
       weight,
       email,
       password,
-      birthDate,
       addressObject,
       bloodType,
       healthProblems,
@@ -91,7 +89,6 @@ export const CreatePatient = () => {
         address,
         age,
         phone,
-        birthDate,
         bloodType,
         healthProblems,
         height,
@@ -141,7 +138,6 @@ export const CreatePatient = () => {
       },
       age: null,
       phone: null,
-      birthDate: '',
       bloodType: '',
       healthProblems: '',
       height: null,
@@ -168,7 +164,6 @@ export const CreatePatient = () => {
       }),
       age: Yup.number(),
       phone: Yup.number(),
-      birthDate: Yup.string(),
       bloodType: Yup.string(),
       healthProblems: Yup.string(),
       height: Yup.number(),

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from 'react-native-elements'
 import { ScrollView, View, TouchableOpacity, Text } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
@@ -10,6 +10,9 @@ import { Input } from '../../components/Input'
 import { styles } from './styles'
 
 import api from '../../services/api'
+import { showMessage } from 'react-native-flash-message'
+
+import { validate } from 'gerador-validador-cpf'
 
 type FormProps = {
   name: string
@@ -25,6 +28,9 @@ export const SignUpDoc = () => {
   const navigation = useNavigation()
 
   const { signIn } = useAuth()
+
+  const [error, setError] = useState(false)
+  const [cpf, setCPF] = useState('')
 
   const handleOnSubmit = async (values: FormProps) => {
     console.log('teste')
@@ -45,9 +51,29 @@ export const SignUpDoc = () => {
         email,
         area,
       })
+      showMessage({
+        message: 'Sucesso!',
+        description: 'Conta criada com sucesso!',
+        type: 'success',
+      })
     } catch (error) {
+      showMessage({
+        message: 'Oops!',
+        description: 'Não conseguimos criar sua conta!',
+        type: 'danger',
+      })
       console.log(error)
     }
+  }
+
+  const handleValidateCpf = (value: string) => {
+    setCPF(value)
+    console.log('CPF', cpf)
+    if (value !== '' && !validate(value)) {
+      setError(true)
+      return null
+    }
+    setError(false)
   }
 
   const formik = useFormik<FormProps>({
@@ -92,6 +118,8 @@ export const SignUpDoc = () => {
           maxLength={11}
           keyboardType="numeric"
           formik={formik}
+          onChangeText={value => handleValidateCpf(value)}
+          errorMessage={error ? 'CPF inválido!' : ''}
         />
         <Input
           name="crm"

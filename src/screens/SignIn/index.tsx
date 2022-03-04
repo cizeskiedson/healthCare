@@ -25,7 +25,7 @@ type FormProps = {
   password: string
 }
 
-export type UserType = 'patient' | 'doctor'
+export type UserType = 'patient' | 'doctor' | 'temp' | 'confident'
 
 export const SignIn = () => {
   const navigation = useNavigation()
@@ -34,26 +34,11 @@ export const SignIn = () => {
 
   const handleOnSignIn = async (values: FormProps) => {
     const { email, password } = values
-    if (password) {
-      try {
-        const response = await signIn(email, password)
-      } catch (error) {
-        console.log(error)
-      }
-    } else {
-      console.log('FAZER ESSA PARTE')
+    try {
+      await signIn(email, password)
+    } catch (error) {
+      console.log(error)
     }
-
-    // if (password) {
-    // try {
-    // const response = await api.post('/users/login', { email, password })
-    // console.log(response.data)
-    // } catch (error) {
-    // console.log(error)
-    // }
-    // } else {
-    // console.log('senha n fornecida.')
-    // }
   }
 
   const formik = useFormik<FormProps>({
@@ -76,7 +61,7 @@ export const SignIn = () => {
     setTimeout(() => {
       if (userSelectedType === 'patient') {
         navigation.navigate('SignUp', { userType: userSelectedType })
-      } else {
+      } else if (userSelectedType === 'doctor') {
         navigation.navigate('SignUpDoc', { userType: userSelectedType })
       }
     }, 200)

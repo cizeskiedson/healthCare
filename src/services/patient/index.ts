@@ -15,25 +15,23 @@ export type Patient = {
   weight: string
 }
 
-export type Doctor = {
-  crm: string
+export type Contact = {
   cpf: string
   email: string
   name: string
   phone: string
-  area: string
 }
 
-export const getPatientsByDoctor = async (
-  doctorEmail: string
-): Promise<Patient[]> => {
-  const { data } = await api.get(`medicos/${doctorEmail}/pacientes`)
+export const getContactsByPatient = async (
+  patientEmail: string
+): Promise<Contact[]> => {
+  const { data } = await api.get(`pacientes/${patientEmail}/confiancas`)
 
   return data
 }
 
-export const getPatients = async (): Promise<Patient[]> => {
-  const { data } = await api.get('pacientes')
+export const getContacts = async (): Promise<Contact[]> => {
+  const { data } = await api.get('confiancas')
 
   return data
 }

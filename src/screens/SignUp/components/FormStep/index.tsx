@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import { Text, ScrollView, TouchableOpacity } from 'react-native'
 
 import { FormikProps } from 'formik'
-
-import DateTimePickerModal from 'react-native-modal-datetime-picker'
 
 import { Input } from '../../../../components/Input'
 
 import { styles } from './styles'
+
+import { validate } from 'gerador-validador-cpf'
 
 type FormStepProps = {
   stepPosition: number
@@ -15,19 +15,17 @@ type FormStepProps = {
 }
 
 export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
+  const [error, setError] = useState(false)
+  const [cpf, setCPF] = useState('')
 
-  const showDatePicker = () => {
-    setDatePickerVisibility(true)
-  }
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false)
-  }
-
-  const handleConfirm = date => {
-    formik.setFieldValue('birthDate', date.toISOString().substring(0, 10))
-    hideDatePicker()
+  const handleValidateCpf = (value: string) => {
+    setCPF(value)
+    console.log('CPF', cpf)
+    if (value !== '' && !validate(value)) {
+      setError(true)
+      return null
+    }
+    setError(false)
   }
 
   return (
@@ -44,9 +42,12 @@ export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
             name="cpf"
             label="CPF"
             placeholder="Digite seu cpf"
+            value={cpf}
             formik={formik}
             maxLength={11}
             keyboardType="numeric"
+            onChangeText={value => handleValidateCpf(value)}
+            errorMessage={error ? 'CPF inválido!' : ''}
           />
           <Input
             name="email"
@@ -71,34 +72,6 @@ export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
             maxLength={11}
             keyboardType="numeric"
           />
-          <View style={{ marginBottom: 20 }}>
-            <TouchableOpacity
-              style={{
-                paddingVertical: 12,
-                paddingHorizontal: 22,
-                backgroundColor: '#1dd3f8',
-                borderRadius: 8,
-              }}
-              onPress={showDatePicker}
-            >
-              <Text
-                style={{
-                  fontSize: 16,
-                  fontWeight: 'bold',
-                  color: '#00042c',
-                  alignSelf: 'center',
-                }}
-              >
-                Data de Nascimento
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={handleConfirm}
-            onCancel={hideDatePicker}
-          />
           <Input
             name="password"
             label="Senha"
@@ -122,6 +95,7 @@ export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
             placeholder="Digite o número"
             formik={formik}
             keyboardType="numeric"
+            maxLength={5}
           />
           <Input
             name="addressObject.neighborhood"
@@ -135,6 +109,7 @@ export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
             placeholder="Digite seu CEP"
             formik={formik}
             keyboardType="numeric"
+            maxLength={8}
           />
         </>
       )}

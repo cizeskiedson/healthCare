@@ -45,6 +45,7 @@ export const AuthProvider: React.FC = ({ children }) => {
   }, [])
 
   const signIn = async (email: string, password: string) => {
+    console.log('aqui')
     const {
       data: { user, token },
     } = await api.post('users/login', { email, password })

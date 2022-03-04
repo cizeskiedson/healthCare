@@ -23,6 +23,9 @@ declare global {
       Search: undefined
       CreatePatient: undefined
       ViewPatientData: undefined
+      ChangePassword: undefined
+      Contacts: undefined
+      CreateContact: undefined
     }
   }
 }

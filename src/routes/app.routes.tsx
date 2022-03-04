@@ -13,6 +13,10 @@ import { ProfileDoc } from '../screens/ProfileDoc'
 import { Search } from '../screens/Search'
 import { CreatePatient } from '../screens/CreatePatient'
 import { ViewPatientData } from '../screens/ViewPatientData'
+import { ChangePassword } from '../screens/ChangePassword'
+import { ViewConfianca } from '../screens/ViewConfianca'
+import { Contacts } from '../screens/Contacts'
+import { CreateContact } from '../screens/CreateContact'
 
 const AppTab = createBottomTabNavigator()
 const AppStack = createNativeStackNavigator()
@@ -22,6 +26,7 @@ const icons: Record<string, string> = {
   Histórico: 'calendar',
   Resumo: 'heart',
   Pacientes: 'activity',
+  Contatos: 'phone',
 }
 
 const TabsDoctor = () => {
@@ -81,6 +86,7 @@ const TabsPatient = () => {
       <>
         <AppTab.Screen name="Resumo" component={Resume} />
         <AppTab.Screen name="Histórico" component={History} />
+        <AppTab.Screen name="Contatos" component={Contacts} />
         <AppTab.Screen name="Perfil" component={Profile} />
       </>
     </AppTab.Navigator>
@@ -91,17 +97,35 @@ export const AppRoutes = () => {
   const { user } = useAuth()
   return (
     <AppStack.Navigator screenOptions={{ headerShown: false }}>
-      {user?.realm === 'pacient' ? (
+      {user?.realm === 'patient' ? (
         <AppStack.Screen
           name="Home"
           component={TabsPatient}
           initialParams={{ id: user?.email, realm: user?.realm }}
         />
-      ) : (
+      ) : user?.realm === 'doctor' ? (
         <AppStack.Screen
           name="Home"
           component={TabsDoctor}
           initialParams={{ id: user?.email, realm: user?.realm }}
+        />
+      ) : user?.realm === 'temp' ? (
+        <AppStack.Screen
+          name="ChangePassword"
+          component={ChangePassword}
+          options={{
+            headerShown: true,
+            headerTitle: 'Alteração de senha',
+          }}
+        />
+      ) : (
+        <AppStack.Screen
+          name="ViewConfianca"
+          component={ViewConfianca}
+          options={{
+            headerShown: true,
+            headerTitle: 'Informações do paciente',
+          }}
         />
       )}
       <AppStack.Screen
@@ -118,6 +142,11 @@ export const AppRoutes = () => {
         name="ViewPatientData"
         component={ViewPatientData}
         options={{ headerShown: true, headerTitle: 'Informações do paciente' }}
+      />
+      <AppStack.Screen
+        name="CreateContact"
+        component={CreateContact}
+        options={{ headerShown: true, headerTitle: 'Cadastrar contato' }}
       />
     </AppStack.Navigator>
   )

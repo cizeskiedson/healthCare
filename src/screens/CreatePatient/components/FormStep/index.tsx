@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import { Text, ScrollView } from 'react-native'
 
 import { FormikProps } from 'formik'
-
-import DateTimePickerModal from 'react-native-modal-datetime-picker'
 
 import { Input } from '../../../../components/Input'
 
@@ -15,21 +13,6 @@ type FormStepProps = {
 }
 
 export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false)
-
-  const showDatePicker = () => {
-    setDatePickerVisibility(true)
-  }
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false)
-  }
-
-  const handleConfirm = date => {
-    formik.setFieldValue('birthDate', date.toISOString().substring(0, 10))
-    hideDatePicker()
-  }
-
   return (
     <ScrollView style={styles.form}>
       {stepPosition === 0 && (
@@ -70,34 +53,6 @@ export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
             formik={formik}
             maxLength={11}
             keyboardType="numeric"
-          />
-          <View style={{ marginBottom: 20 }}>
-            <TouchableOpacity
-              style={{
-                paddingVertical: 12,
-                paddingHorizontal: 22,
-                backgroundColor: '#1dd3f8',
-                borderRadius: 8,
-              }}
-              onPress={showDatePicker}
-            >
-              <Text
-                style={{
-                  fontSize: 16,
-                  fontWeight: 'bold',
-                  color: '#00042c',
-                  alignSelf: 'center',
-                }}
-              >
-                Data de Nascimento
-              </Text>
-            </TouchableOpacity>
-          </View>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={handleConfirm}
-            onCancel={hideDatePicker}
           />
           <Input
             name="password"
