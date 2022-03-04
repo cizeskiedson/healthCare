@@ -1,33 +1,45 @@
 import { StyleSheet } from 'react-native'
+import { colors } from '../../styles/colors'
 
 export const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#fff',
+    flexGrow: 1,
+    backgroundColor: colors.white,
     paddingHorizontal: 14,
+    paddingVertical: 24,
+    justifyContent: 'center',
   },
-  content: {
-    flex: 1,
+  illustration: {
+    width: 300,
+    height: 240,
+    alignSelf: 'center',
+    marginVertical: 40,
   },
-  footer: { height: 100 },
-  title: {},
   text: {
     fontSize: 25,
     fontWeight: 'bold',
     letterSpacing: 1,
   },
+  button: {
+    backgroundColor: colors.darkGreen,
+    padding: 14,
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: colors.white,
+  },
   signup: {
-    padding: 5,
+    marginTop: 14,
     alignItems: 'center',
   },
   signuptext: {
+    marginTop: 6,
     fontSize: 15,
     fontWeight: 'bold',
     color: '#959595',
-  },
-  logo: {
-    width: undefined,
-    height: undefined,
-    flex: 0.56,
   },
 })
