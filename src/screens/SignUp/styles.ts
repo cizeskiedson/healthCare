@@ -1,9 +1,10 @@
 import { StyleSheet } from 'react-native'
+import { colors } from '../../styles/colors'
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
     paddingHorizontal: 14,
     paddingVertical: 24,
   },
@@ -22,6 +23,18 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  touchable: {
+    paddingVertical: 12,
+    paddingHorizontal: 22,
+    backgroundColor: colors.darkGreen,
+    borderRadius: 8,
+  },
+  textButton: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: colors.white,
+    alignSelf: 'center',
+  },
 })
 
 export const stepStyles = {
@@ -29,21 +42,21 @@ export const stepStyles = {
   currentStepIndicatorSize: 30,
   separatorStrokeWidth: 2,
   currentStepStrokeWidth: 3,
-  stepStrokeCurrentColor: '#1dd3f8',
+  stepStrokeCurrentColor: colors.darkGreen,
   stepStrokeWidth: 2,
-  stepStrokeFinishedColor: '#00042c',
-  stepStrokeUnFinishedColor: '#d1f6fd',
-  separatorFinishedColor: '#1dd3f8',
-  separatorUnFinishedColor: '#d1f6fd',
-  stepIndicatorFinishedColor: '#1abddf',
-  stepIndicatorUnFinishedColor: '#ffffff',
-  stepIndicatorCurrentColor: '#ffffff',
+  stepStrokeFinishedColor: colors.darkGreen,
+  stepStrokeUnFinishedColor: colors.gray,
+  separatorFinishedColor: colors.darkGreen,
+  separatorUnFinishedColor: colors.gray,
+  stepIndicatorFinishedColor: colors.darkGreen,
+  stepIndicatorUnFinishedColor: colors.white,
+  stepIndicatorCurrentColor: colors.white,
   stepIndicatorLabelFontSize: 13,
   currentStepIndicatorLabelFontSize: 13,
-  stepIndicatorLabelCurrentColor: '#1dd3f8',
-  stepIndicatorLabelFinishedColor: '#00042c',
-  stepIndicatorLabelUnFinishedColor: '#d1f6fd',
-  labelColor: '#d1f6fd',
+  stepIndicatorLabelCurrentColor: colors.darkGreen,
+  stepIndicatorLabelFinishedColor: colors.darkGray,
+  stepIndicatorLabelUnFinishedColor: colors.gray,
+  labelColor: colors.gray,
   labelSize: 13,
-  currentStepLabelColor: '#1dd3f8',
+  currentStepLabelColor: colors.darkGreen,
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
-import { Button } from 'react-native-elements'
+import { Button, colors } from 'react-native-elements'
 
 import { useNavigation } from '@react-navigation/native'
 
@@ -80,12 +80,13 @@ export const SignUp = () => {
       addressObject.zipCode
 
     try {
+      console.log('hello')
       await api.post('signup', {
         email,
         password,
         realm,
       })
-      const a = await api.post('signup', {
+      await api.post('signup', {
         email: emailC,
         password: '123senha',
         realm: 'temp',
@@ -115,7 +116,6 @@ export const SignUp = () => {
         emailPaciente: email,
         emailConfianca: emailC,
       })
-      console.log(a)
       showMessage({
         message: 'Sucesso!',
         description: 'Conta criada com sucesso!',
@@ -214,29 +214,17 @@ export const SignUp = () => {
         />
 
         <TouchableOpacity
-          style={{
-            paddingVertical: 12,
-            paddingHorizontal: 22,
-            backgroundColor: '#1dd3f8',
-            borderRadius: 8,
-          }}
+          style={styles.touchable}
           onPress={() => {
             if (stepPosition === 3) {
-              /* console.log(formik.values) */
+              console.log(formik.values)
               formik.handleSubmit()
             } else {
               setStepPosition(oldValue => oldValue + 1)
             }
           }}
         >
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: 'bold',
-              color: '#00042c',
-              alignSelf: 'center',
-            }}
-          >
+          <Text style={styles.textButton}>
             {stepPosition === 3 ? 'Salvar' : 'Continuar'}
           </Text>
         </TouchableOpacity>

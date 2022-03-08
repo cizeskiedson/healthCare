@@ -20,7 +20,9 @@ export const FormStep = ({ stepPosition, formik }: FormStepProps) => {
 
   const handleValidateCpf = (value: string) => {
     setCPF(value)
-    console.log('CPF', cpf)
+    console.log(formik.values.cpf)
+    formik.setFieldValue('cpf', value)
+    console.log(formik.values.cpf)
     if (value !== '' && !validate(value)) {
       setError(true)
       return null

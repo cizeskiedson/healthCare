@@ -30,7 +30,6 @@ export const SignUpDoc = () => {
   const { signIn } = useAuth()
 
   const [error, setError] = useState(false)
-  const [cpf, setCPF] = useState('')
 
   const handleOnSubmit = async (values: FormProps) => {
     console.log('teste')
@@ -67,8 +66,7 @@ export const SignUpDoc = () => {
   }
 
   const handleValidateCpf = (value: string) => {
-    setCPF(value)
-    console.log('CPF', cpf)
+    formik.setFieldValue('cpf', value)
     if (value !== '' && !validate(value)) {
       setError(true)
       return null
@@ -168,24 +166,10 @@ export const SignUpDoc = () => {
           }}
         />
         <TouchableOpacity
-          style={{
-            paddingVertical: 12,
-            paddingHorizontal: 22,
-            backgroundColor: '#1dd3f8',
-            borderRadius: 8,
-          }}
+          style={styles.touchable}
           onPress={() => formik.handleSubmit()}
         >
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: 'bold',
-              color: '#00042c',
-              alignSelf: 'center',
-            }}
-          >
-            Salvar
-          </Text>
+          <Text style={styles.text}>Salvar</Text>
         </TouchableOpacity>
       </View>
     </View>
