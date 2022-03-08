@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, TouchableOpacity, Modal, ScrollView } from 'react-native'
+import { Text, View, TouchableOpacity, ScrollView } from 'react-native'
 
 import { Input } from '../../components/Input'
+import { Modal } from '../../components/Modal'
 import api from '../../services/api'
 import { styles } from './styles'
 import { useAuth } from '../../context/auth'
@@ -28,13 +29,10 @@ export const Profile = () => {
   const [weight, setWeight] = useState('')
   const [address, setAddress] = useState('')
   const [observations, setObservations] = useState('')
-  const [password, setPassword] = useState('')
-  const [oldPassword, setOldPassword] = useState('')
 
   const [edit, setEdit] = useState(false)
   const { signOut } = useAuth()
   const [isVisible, setIsVisible] = useState(false)
-  const [isVisible2, setIsVisible2] = useState(false)
   const isFocused = useIsFocused()
 
   const handleOnFillForms = async () => {
@@ -96,23 +94,6 @@ export const Profile = () => {
       handleOnFillForms()
     }
   }, [edit])
-
-  const handleChangePassword = async () => {
-    try {
-      /* FAZER AQUI */
-      showMessage({
-        message: 'Sucesso!',
-        description: 'Senha alterada com sucesso',
-        type: 'success',
-      })
-    } catch (error) {
-      showMessage({
-        message: 'Oops!',
-        description: 'Não foi possível mudar sua senha',
-        type: 'danger',
-      })
-    }
-  }
 
   return (
     <View style={styles.container}>
@@ -180,12 +161,6 @@ export const Profile = () => {
               letterSpacing: 0.1,
             }}
           ></Feather>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.password}>
-        <Text>Deseja alterar sua senha?</Text>
-        <TouchableOpacity onPress={() => setIsVisible2(true)}>
-          <Text style={styles.passwordtext}>Clique aqui.</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.content}>
@@ -301,145 +276,19 @@ export const Profile = () => {
             onChangeText={value => setObservations(value)}
           />
         </ScrollView>
-        <Modal visible={isVisible} transparent style={{}}>
-          <View style={styles.containerModal}>
-            <View style={styles.backgroundModal}>
-              <View>
-                <Text style={styles.textBold}>Tem certeza que quer sair?</Text>
-                <Text style={styles.text}>
-                  Caso queira, você retornará a tela inicial do aplicativo.
-                </Text>
-
-                <View style={styles.divModal} />
-              </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <TouchableOpacity
-                  style={{
-                    paddingVertical: 12,
-                    paddingHorizontal: 22,
-                    backgroundColor: '#1dd3f8',
-                    borderRadius: 8,
-                  }}
-                  onPress={() => setIsVisible(false)}
-                >
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: 'bold',
-                      color: '#00042c',
-                    }}
-                  >
-                    Voltar
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={{
-                    paddingVertical: 12,
-                    paddingHorizontal: 22,
-                    backgroundColor: '#D9534F',
-                    borderRadius: 8,
-                  }}
-                  onPress={signOut}
-                >
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: 'bold',
-                      color: '#00042c',
-                    }}
-                  >
-                    Sim
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
+        <Modal
+          visible={isVisible}
+          onRequestClose={() => setIsVisible(false)}
+          title="Tem certeza que deseja sair?"
+          description="Caso queira, você retornará a tela inicial do aplicativo."
+          options={[
+            {
+              name: 'Sair',
+              onPress: () => signOut(),
+            },
+          ]}
+        />
       </View>
-      <Modal visible={isVisible2} transparent style={{}}>
-        <View style={styles.containerModal}>
-          <View style={styles.backgroundModal}>
-            <View>
-              <Text style={styles.textBold}>Alterar senha</Text>
-              <Text style={styles.text}>
-                Por favor, preencha os campos abaixo para prosseguir.
-              </Text>
-              <View style={styles.divModal} />
-            </View>
-            <Input
-              name="oldPassword"
-              label="Senha Antiga"
-              placeholder="Digite sua senha antiga"
-              editable={edit}
-              value={oldPassword}
-              onChangeText={value => setOldPassword(value)}
-            />
-            <Input
-              name="password"
-              label="Nova Senha"
-              placeholder="Digite sua nova senha"
-              editable={edit}
-              value={password}
-              onChangeText={value => setPassword(value)}
-            />
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <TouchableOpacity
-                style={{
-                  paddingVertical: 12,
-                  paddingHorizontal: 22,
-                  backgroundColor: '#1dd3f8',
-                  borderRadius: 8,
-                }}
-                onPress={() => setIsVisible2(false)}
-              >
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    color: '#00042c',
-                  }}
-                >
-                  Voltar
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{
-                  paddingVertical: 12,
-                  paddingHorizontal: 22,
-                  backgroundColor: '#00042c',
-                  borderRadius: 8,
-                }}
-                onPress={() => handleChangePassword()}
-              >
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    color: '#1dd3f8',
-                  }}
-                >
-                  Salvar
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
     </View>
   )
 }

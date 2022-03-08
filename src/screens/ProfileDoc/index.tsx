@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, TouchableOpacity, Modal, ScrollView } from 'react-native'
+import { Text, View, TouchableOpacity, ScrollView } from 'react-native'
+
+import { Modal } from '../../components/Modal'
 
 import { Input } from '../../components/Input'
 import api from '../../services/api'
@@ -203,68 +205,18 @@ export const ProfileDoc = () => {
             onChangeText={value => setArea(value)}
           />
         </ScrollView>
-        <Modal visible={isVisible} transparent style={{}}>
-          <View style={styles.containerModal}>
-            <View style={styles.backgroundModal}>
-              <View>
-                <Text style={styles.textBold}>Tem certeza que quer sair?</Text>
-                <Text style={styles.text}>
-                  Caso queira, você retornará a tela inicial do aplicativo.
-                </Text>
-
-                <View style={styles.divModal} />
-              </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <TouchableOpacity
-                  style={{
-                    paddingVertical: 12,
-                    paddingHorizontal: 22,
-                    backgroundColor: '#1dd3f8',
-                    borderRadius: 8,
-                  }}
-                  onPress={() => setIsVisible(false)}
-                >
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: 'bold',
-                      color: '#00042c',
-                    }}
-                  >
-                    Voltar
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={{
-                    paddingVertical: 12,
-                    paddingHorizontal: 22,
-                    backgroundColor: '#D9534F',
-                    borderRadius: 8,
-                  }}
-                  onPress={signOut}
-                >
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: 'bold',
-                      color: '#00042c',
-                    }}
-                  >
-                    Sim
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
+        <Modal
+          visible={isVisible}
+          onRequestClose={() => setIsVisible(false)}
+          title="Tem certeza que deseja sair?"
+          description="Caso queira, você retornará a tela inicial do aplicativo."
+          options={[
+            {
+              name: 'Sair',
+              onPress: () => signOut(),
+            },
+          ]}
+        />
       </View>
     </View>
   )

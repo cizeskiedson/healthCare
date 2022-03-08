@@ -1,13 +1,13 @@
 import { StyleSheet } from 'react-native'
-
+import { colors } from '../../styles/colors'
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.white,
     paddingHorizontal: 14,
   },
   touchable: {
-    backgroundColor: '#00042C',
+    backgroundColor: colors.darkGreen,
     justifyContent: 'center',
     borderRadius: 8,
     paddingHorizontal: 14,
@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 20,
-    backgroundColor: '#d9d9d9',
+    backgroundColor: colors.lightGray,
     padding: 14,
     borderRadius: 8,
   },
@@ -41,5 +41,21 @@ export const styles = StyleSheet.create({
   actions: {
     justifyContent: 'center',
     alignContent: 'center',
+  },
+  options: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  textNew: {
+    fontSize: 16,
+    color: colors.white,
+    justifyContent: 'center',
+    alignSelf: 'center',
+  },
+  textSearch: {
+    fontSize: 16,
+    color: colors.white,
+    justifyContent: 'center',
+    alignSelf: 'center',
   },
 })

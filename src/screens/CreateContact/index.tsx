@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
 
 import { useNavigation } from '@react-navigation/native'
@@ -6,7 +6,6 @@ import { useNavigation } from '@react-navigation/native'
 import { useAuth } from '../../context/auth'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { Feather } from '@expo/vector-icons'
 
 import { styles } from './styles'
 
@@ -112,9 +111,7 @@ export const CreateContact = () => {
         style={styles.touchable}
         onPress={() => formik.handleSubmit()}
       >
-        <Text style={{ color: '#1dd3f8', fontSize: 18, textAlign: 'center' }}>
-          Salvar contato
-        </Text>
+        <Text style={styles.text}>Salvar contato</Text>
       </TouchableOpacity>
     </View>
   )

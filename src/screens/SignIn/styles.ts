@@ -33,11 +33,13 @@ export const styles = StyleSheet.create({
     color: colors.white,
   },
   signup: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     marginTop: 14,
     alignItems: 'center',
   },
   signuptext: {
-    marginTop: 6,
+    margin: 4,
     fontSize: 15,
     fontWeight: 'bold',
     color: '#959595',

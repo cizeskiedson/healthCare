@@ -17,6 +17,7 @@ import { ChangePassword } from '../screens/ChangePassword'
 import { ViewConfianca } from '../screens/ViewConfianca'
 import { Contacts } from '../screens/Contacts'
 import { CreateContact } from '../screens/CreateContact'
+import { colors } from '../styles/colors'
 
 const AppTab = createBottomTabNavigator()
 const AppStack = createNativeStackNavigator()
@@ -33,8 +34,8 @@ const TabsDoctor = () => {
   return (
     <AppTab.Navigator
       screenOptions={({ route }) => ({
-        tabBarActiveTintColor: 'purple',
-        tabBarInactiveTintColor: '#92929C',
+        tabBarActiveTintColor: colors.darkGreen,
+        tabBarInactiveTintColor: colors.gray,
         tabBarStyle: {
           height: 60,
         },
@@ -64,8 +65,8 @@ const TabsPatient = () => {
   return (
     <AppTab.Navigator
       screenOptions={({ route }) => ({
-        tabBarActiveTintColor: 'purple',
-        tabBarInactiveTintColor: '#92929C',
+        tabBarActiveTintColor: colors.darkGreen,
+        tabBarInactiveTintColor: colors.gray,
         tabBarStyle: {
           height: 60,
         },
@@ -97,8 +98,8 @@ const TabsConfident = () => {
   return (
     <AppTab.Navigator
       screenOptions={({ route }) => ({
-        tabBarActiveTintColor: 'purple',
-        tabBarInactiveTintColor: '#92929C',
+        tabBarActiveTintColor: colors.darkGreen,
+        tabBarInactiveTintColor: colors.gray,
         tabBarStyle: {
           height: 60,
         },
@@ -128,8 +129,8 @@ const TabsPatientToDoctor = () => {
   return (
     <AppTab.Navigator
       screenOptions={({ route }) => ({
-        tabBarActiveTintColor: 'purple',
-        tabBarInactiveTintColor: '#92929C',
+        tabBarActiveTintColor: colors.darkGreen,
+        tabBarInactiveTintColor: colors.gray,
         tabBarStyle: {
           height: 60,
         },

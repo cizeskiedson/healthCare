@@ -5,17 +5,17 @@ import {
   ActivityIndicator,
   FlatList,
   TouchableOpacity,
-  Modal,
 } from 'react-native'
 import { Searchbar } from 'react-native-paper'
 import { showMessage } from 'react-native-flash-message'
 import { Feather } from '@expo/vector-icons'
 import { useNavigation, useIsFocused } from '@react-navigation/native'
-
+import { Modal } from '../../components/Modal'
 import { useAuth } from '../../context/auth'
 import { getContactsByPatient, Contact } from '../../services/patient'
 import { styles } from './styles'
 import api from '../../services/api'
+import { colors } from 'react-native-elements'
 
 export type Pc = {
   id: string
@@ -93,12 +93,6 @@ export const Contacts = () => {
 
   const handleBack = () => {
     setIsVisible(false)
-  }
-
-  const handlePressEdit = (item: Contact) => {
-    setTimeout(() => {
-      navigation.navigate('ViewPatientData')
-    }, 200)
   }
 
   const handlePressDelete = (item: Contact) => {
@@ -180,110 +174,21 @@ export const Contacts = () => {
         style={styles.touchable}
         onPress={() => navigateToSignUp()}
       >
-        <Feather
-          name="plus"
-          style={{
-            fontSize: 17,
-            color: '#1dd3f8',
-            justifyContent: 'center',
-            alignSelf: 'center',
-          }}
-        >
-          Adicionar novo contato
-        </Feather>
+        <Text style={styles.text}>Adicionar novo contato</Text>
       </TouchableOpacity>
       <Modal
         visible={isVisible}
-        transparent
-        style={{}}
         onRequestClose={() => setIsVisible(false)}
-      >
-        <View
-          style={{
-            flex: 1,
-            backgroundColor: 'rgba(0, 0, 0, 0.4)',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: 14,
-          }}
-        >
-          <View
-            style={{
-              width: '100%',
-              backgroundColor: 'white',
-              padding: 14,
-              borderRadius: 8,
-            }}
-          >
-            <View>
-              <Text style={{ fontSize: 22, fontWeight: 'bold' }}>
-                Remover contato
-              </Text>
-              <Text style={{ color: '#959595', marginTop: 8 }}>
-                Por favor, confirme a remoção do usuário de sua lista de
-                contatos.
-              </Text>
-
-              <View
-                style={{
-                  height: 2,
-                  width: '100%',
-                  backgroundColor: '#D9D9D9',
-                  marginVertical: 20,
-                }}
-              />
-            </View>
-
-            <View
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}
-            >
-              <TouchableOpacity
-                style={{
-                  paddingVertical: 12,
-                  paddingHorizontal: 22,
-                  backgroundColor: '#1dd3f8',
-                  borderRadius: 8,
-                }}
-                onPress={() => handleBack()}
-              >
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    color: '#00042c',
-                  }}
-                >
-                  Cancelar
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={{
-                  paddingVertical: 12,
-                  paddingHorizontal: 22,
-                  backgroundColor: '#00042c',
-                  borderRadius: 8,
-                }}
-                onPress={() => handleDelete()}
-              >
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    color: '#1dd3f8',
-                  }}
-                >
-                  Confirmar
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
+        title="Remover contato"
+        description="Por favor, confirme a remoção do usuário de sua lista de
+        contatos."
+        options={[
+          {
+            name: 'Confirmar',
+            onPress: () => handleDelete(),
+          },
+        ]}
+      />
     </View>
   )
 }
