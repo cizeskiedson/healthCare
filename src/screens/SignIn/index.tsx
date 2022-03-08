@@ -4,9 +4,11 @@ import {
   View,
   Image,
   TouchableOpacity,
-  Modal,
   StatusBar,
+  ActivityIndicator,
 } from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { showMessage } from 'react-native-flash-message'
 
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -16,9 +18,12 @@ import { useNavigation } from '@react-navigation/native'
 import { useAuth } from '../../context/auth'
 
 import { Input } from '../../components/Input'
-import api from '../../services/api'
+import { Logo } from '../../components/Logo'
+import { Modal } from '../../components/Modal'
+
+import { colors } from '../../styles/colors'
 import { styles } from './styles'
-import logoIoT from '../../assets/logo.png'
+import illustrationImg from '../../assets/health-illustration.png'
 
 type FormProps = {
   email: string
@@ -30,14 +35,24 @@ export type UserType = 'patient' | 'doctor' | 'temp' | 'confident'
 export const SignIn = () => {
   const navigation = useNavigation()
   const { signIn } = useAuth()
+
+  const [isLoading, setIsLoading] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
 
   const handleOnSignIn = async (values: FormProps) => {
+    setIsLoading(true)
     const { email, password } = values
+
     try {
       await signIn(email, password)
     } catch (error) {
-      console.log(error)
+      showMessage({
+        message: 'Oops!',
+        description: 'E-mail ou senha incorretos.',
+        type: 'danger',
+      })
+
+      setIsLoading(false)
     }
   }
 
@@ -50,7 +65,7 @@ export const SignIn = () => {
       email: Yup.string()
         .email('E-mail inválido.')
         .required('E-mail é um campo obrigatório.'),
-      password: Yup.string(),
+      password: Yup.string().required('Senha é um campo obrigatório'),
     }),
     onSubmit: values => handleOnSignIn(values),
   })
@@ -68,151 +83,80 @@ export const SignIn = () => {
   }
 
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <StatusBar
-          backgroundColor={isVisible ? 'rgba(0, 0, 0, 0.4)' : '#fff'}
-          barStyle="dark-content"
-        />
-        <View style={styles.signup}>
-          <Text>Não possui cadastro ainda?</Text>
-          <TouchableOpacity onPress={() => setIsVisible(true)}>
-            <Text style={styles.signuptext}>Cadastre-se.</Text>
-          </TouchableOpacity>
-        </View>
+    <>
+      <StatusBar
+        backgroundColor={isVisible ? 'rgba(0, 0, 0, 0.4)' : '#fff'}
+        barStyle="dark-content"
+      />
+
+      <KeyboardAwareScrollView contentContainerStyle={styles.container}>
         <View>
-          <Input
-            name="email"
-            label="E-mail"
-            placeholder="Digite seu e-mail."
-            formik={formik}
+          <Logo />
+          <Image
+            source={illustrationImg}
+            resizeMode="contain"
+            style={styles.illustration}
           />
-          <Input
-            name="password"
-            label="Senha"
-            placeholder="Digite sua senha."
-            secureTextEntry
-            formik={formik}
-          />
-          <TouchableOpacity
-            style={{
-              paddingVertical: 12,
-              paddingHorizontal: 22,
-              backgroundColor: '#00042C',
-              borderRadius: 8,
-            }}
-            onPress={() => formik.handleSubmit()}
-          >
-            <Text
-              style={{
-                fontSize: 16,
-                fontWeight: 'bold',
-                color: '#1dd3f8',
-                alignSelf: 'center',
-              }}
-            >
-              Entrar
-            </Text>
-          </TouchableOpacity>
         </View>
 
-        <Modal
-          visible={isVisible}
-          transparent
-          style={{}}
-          onRequestClose={() => setIsVisible(false)}
-        >
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: 'rgba(0, 0, 0, 0.4)',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: 14,
-            }}
-          >
-            <View
-              style={{
-                width: '100%',
-                backgroundColor: 'white',
-                padding: 14,
-                borderRadius: 8,
-              }}
+        <View>
+          <View>
+            <Input
+              name="email"
+              label="E-mail"
+              placeholder="Digite seu e-mail."
+              formik={formik}
+            />
+            <Input
+              name="password"
+              label="Senha"
+              placeholder="Digite sua senha."
+              secureTextEntry
+              formik={formik}
+            />
+            <TouchableOpacity
+              style={
+                formik.isValid
+                  ? styles.button
+                  : { ...styles.button, opacity: 0.7 }
+              }
+              onPress={() => formik.handleSubmit()}
+              disabled={!formik.isValid}
             >
-              <View>
-                <Text style={{ fontSize: 22, fontWeight: 'bold' }}>
-                  Selecione o tipo de usuário
-                </Text>
-                <Text style={{ color: '#959595', marginTop: 8 }}>
-                  Precisamos que selecione um tipo de usuário para efetuar o
-                  cadastro
-                </Text>
+              {isLoading ? (
+                <ActivityIndicator size="small" color={colors.white} />
+              ) : (
+                <Text style={styles.buttonText}>Entrar</Text>
+              )}
+            </TouchableOpacity>
 
-                <View
-                  style={{
-                    height: 2,
-                    width: '100%',
-                    backgroundColor: '#D9D9D9',
-                    marginVertical: 20,
-                  }}
-                />
-              </View>
-
-              <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <TouchableOpacity
-                  style={{
-                    paddingVertical: 12,
-                    paddingHorizontal: 22,
-                    backgroundColor: '#1dd3f8',
-                    borderRadius: 8,
-                  }}
-                  onPress={() => navigateToSignUp('patient')}
-                >
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: 'bold',
-                      color: '#00042c',
-                    }}
-                  >
-                    Sou paciente
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={{
-                    paddingVertical: 12,
-                    paddingHorizontal: 22,
-                    backgroundColor: '#00042c',
-                    borderRadius: 8,
-                  }}
-                  onPress={() => navigateToSignUp('doctor')}
-                >
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: 'bold',
-                      color: '#1dd3f8',
-                    }}
-                  >
-                    Sou médico
-                  </Text>
-                </TouchableOpacity>
-              </View>
+            <View style={styles.signup}>
+              <Text>Não possui cadastro ainda?</Text>
+              <TouchableOpacity onPress={() => setIsVisible(true)}>
+                <Text style={styles.signuptext}>Cadastre-se.</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        </Modal>
-      </View>
-      <View style={styles.footer}>
-        <Text style={{ color: '#959595' }}>powered by</Text>
-        <Image source={logoIoT} style={styles.logo} />
-      </View>
-    </View>
+
+          <Modal
+            visible={isVisible}
+            onRequestClose={() => setIsVisible(false)}
+            title="Selecione o tipo de usuário"
+            description="Precisamos que selecione um tipo de usuário para efetuar o
+              cadastro"
+            options={[
+              {
+                name: 'Sou paciente',
+                onPress: () => navigateToSignUp('patient'),
+              },
+              {
+                name: 'Sou doutor',
+                onPress: () => navigateToSignUp('doctor'),
+              },
+            ]}
+          />
+        </View>
+      </KeyboardAwareScrollView>
+    </>
   )
 }
