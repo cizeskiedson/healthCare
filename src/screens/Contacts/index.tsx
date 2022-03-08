@@ -31,7 +31,6 @@ export const Contacts = () => {
   const [loading, setLoading] = useState(false)
   const [searchText, setSearchText] = useState('')
   const [isVisible, setIsVisible] = useState(false)
-  const [isVisible2, setIsVisible2] = useState(false)
   const [delContact, setDelContact] = useState<Contact>()
   const isFocused = useIsFocused()
   const navigation = useNavigation()
@@ -69,18 +68,16 @@ export const Contacts = () => {
             <Text style={styles.description}>{item.email}</Text>
           </View>
         </View>
-
-        <View style={styles.actions}>
-          <TouchableOpacity onPress={() => handlePressEdit(item)}>
-            <Feather name="external-link" size={22} />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{ marginTop: 8 }}
-            onPress={() => handlePressDelete(item)}
-          >
-            <Feather name="trash" size={22} />
-          </TouchableOpacity>
-        </View>
+        {item.type === 'contact' ? (
+          <View style={styles.actions}>
+            <TouchableOpacity
+              style={{ marginTop: 8 }}
+              onPress={() => handlePressDelete(item)}
+            >
+              <Feather name="trash" size={22} />
+            </TouchableOpacity>
+          </View>
+        ) : null}
       </View>
     ),
     []

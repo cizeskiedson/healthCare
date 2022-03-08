@@ -112,7 +112,7 @@ export const ViewDoc2 = () => {
 
   const handlePressEdit = (item: Patient) => {
     setTimeout(() => {
-      navigation.navigate('ViewPatientData')
+      navigation.navigate('PatientData', { patient: item })
     }, 200)
   }
 

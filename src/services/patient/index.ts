@@ -20,6 +20,7 @@ export type Contact = {
   email: string
   name: string
   phone: string
+  type: string
 }
 
 export const getContactsByPatient = async (

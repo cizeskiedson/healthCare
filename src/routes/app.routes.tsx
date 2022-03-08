@@ -93,6 +93,69 @@ const TabsPatient = () => {
   )
 }
 
+const TabsConfident = () => {
+  return (
+    <AppTab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarActiveTintColor: 'purple',
+        tabBarInactiveTintColor: '#92929C',
+        tabBarStyle: {
+          height: 60,
+        },
+        tabBarLabelStyle: {
+          marginBottom: 6,
+        },
+        tabBarIcon: ({ color, size }) => {
+          return (
+            <Feather
+              name={icons[route.name] as keyof typeof Feather.glyphMap}
+              color={color}
+              size={size}
+            />
+          )
+        },
+      })}
+    >
+      <>
+        <AppTab.Screen name="Resumo" component={Resume} />
+        <AppTab.Screen name="Histórico" component={History} />
+      </>
+    </AppTab.Navigator>
+  )
+}
+
+const TabsPatientToDoctor = () => {
+  return (
+    <AppTab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarActiveTintColor: 'purple',
+        tabBarInactiveTintColor: '#92929C',
+        tabBarStyle: {
+          height: 60,
+        },
+        tabBarLabelStyle: {
+          marginBottom: 6,
+        },
+        tabBarIcon: ({ color, size }) => {
+          return (
+            <Feather
+              name={icons[route.name] as keyof typeof Feather.glyphMap}
+              color={color}
+              size={size}
+            />
+          )
+        },
+      })}
+    >
+      <>
+        <AppTab.Screen name="Resumo" component={Resume} />
+        <AppTab.Screen name="Histórico" component={History} />
+        <AppTab.Screen name="Perfil" component={Profile} />
+      </>
+    </AppTab.Navigator>
+  )
+}
+
 export const AppRoutes = () => {
   const { user } = useAuth()
   return (
@@ -119,15 +182,9 @@ export const AppRoutes = () => {
           }}
         />
       ) : (
-        <AppStack.Screen
-          name="ViewConfianca"
-          component={ViewConfianca}
-          options={{
-            headerShown: true,
-            headerTitle: 'Informações do paciente',
-          }}
-        />
+        <AppStack.Screen name="Home" component={TabsConfident} />
       )}
+      <AppStack.Screen name="PatientData" component={TabsPatientToDoctor} />
       <AppStack.Screen
         name="Search"
         component={Search}

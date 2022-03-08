@@ -34,6 +34,7 @@ export const CreateContact = () => {
         cpf,
         email,
         phone,
+        type: 'contact',
       })
       await api.post('pcs', {
         emailPaciente: user?.email,

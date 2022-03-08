@@ -6,7 +6,7 @@ import api from '../../services/api'
 import { styles } from './styles'
 import { useAuth } from '../../context/auth'
 
-import { useIsFocused } from '@react-navigation/native'
+import { useIsFocused, useRoute } from '@react-navigation/native'
 
 import { Feather } from '@expo/vector-icons'
 import { Patient } from '../../services/doctor'
@@ -15,8 +15,9 @@ import { showMessage } from 'react-native-flash-message'
 
 export const Profile = () => {
   const { user } = useAuth()
+  const route = useRoute()
   const [data, setData] = useState<Patient>()
-
+  console.log(route.params)
   const [name, setName] = useState('')
   const [age, setAge] = useState('')
   const [allergies, setAllergies] = useState('')

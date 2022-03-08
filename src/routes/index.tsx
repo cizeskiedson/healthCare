@@ -7,6 +7,7 @@ import { AppRoutes } from './app.routes'
 import { UserType } from '../screens/SignIn'
 
 import { useAuth } from '../context/auth'
+import { Patient } from '../services/doctor'
 
 declare global {
   namespace ReactNavigation {
@@ -26,6 +27,7 @@ declare global {
       ChangePassword: undefined
       Contacts: undefined
       CreateContact: undefined
+      PatientData: { patient: Patient }
     }
   }
 }
