@@ -14,7 +14,7 @@ import { Patient } from '../../services/doctor'
 
 import { showMessage } from 'react-native-flash-message'
 
-export const Profile = () => {
+export const Profile = (patient: Patient) => {
   const { user } = useAuth()
   const route = useRoute()
   const [data, setData] = useState<Patient>()

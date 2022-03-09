@@ -12,9 +12,7 @@ import { ViewDoc2 } from '../screens/ViewDoc2'
 import { ProfileDoc } from '../screens/ProfileDoc'
 import { Search } from '../screens/Search'
 import { CreatePatient } from '../screens/CreatePatient'
-import { ViewPatientData } from '../screens/ViewPatientData'
 import { ChangePassword } from '../screens/ChangePassword'
-import { ViewConfianca } from '../screens/ViewConfianca'
 import { Contacts } from '../screens/Contacts'
 import { CreateContact } from '../screens/CreateContact'
 import { colors } from '../styles/colors'
@@ -185,7 +183,11 @@ export const AppRoutes = () => {
       ) : (
         <AppStack.Screen name="Home" component={TabsConfident} />
       )}
-      <AppStack.Screen name="PatientData" component={TabsPatientToDoctor} />
+      <AppStack.Screen
+        name="PatientData"
+        component={TabsPatientToDoctor}
+        initialParams={{ key: 'value' }}
+      />
       <AppStack.Screen
         name="Search"
         component={Search}
@@ -195,11 +197,6 @@ export const AppRoutes = () => {
         name="CreatePatient"
         component={CreatePatient}
         options={{ headerShown: true, headerTitle: 'Cadastrar paciente' }}
-      />
-      <AppStack.Screen
-        name="ViewPatientData"
-        component={ViewPatientData}
-        options={{ headerShown: true, headerTitle: 'Informações do paciente' }}
       />
       <AppStack.Screen
         name="CreateContact"
