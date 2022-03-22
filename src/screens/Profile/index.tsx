@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Text, View, TouchableOpacity, ScrollView } from 'react-native'
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native'
 
 import { Input } from '../../components/Input'
 import { Modal } from '../../components/Modal'
@@ -7,18 +13,24 @@ import api from '../../services/api'
 import { styles } from './styles'
 import { useAuth } from '../../context/auth'
 
-import { useIsFocused, useRoute } from '@react-navigation/native'
+import { useIsFocused, useRoute, RouteProp } from '@react-navigation/native'
 
 import { Feather } from '@expo/vector-icons'
 import { Patient } from '../../services/doctor'
 
 import { showMessage } from 'react-native-flash-message'
 
-export const Profile = (patient: Patient) => {
+type ParamList = {
+  Profile: {
+    email: string
+  }
+}
+
+export const Profile = () => {
   const { user } = useAuth()
-  const route = useRoute()
+  const route = useRoute<RouteProp<ParamList, 'Profile'>>()
+  const [email, setEmail] = useState('')
   const [data, setData] = useState<Patient>()
-  console.log(route.params)
   const [name, setName] = useState('')
   const [age, setAge] = useState('')
   const [allergies, setAllergies] = useState('')
@@ -30,15 +42,21 @@ export const Profile = (patient: Patient) => {
   const [address, setAddress] = useState('')
   const [observations, setObservations] = useState('')
 
+  const [loading, setLoading] = useState(false)
   const [edit, setEdit] = useState(false)
   const { signOut } = useAuth()
   const [isVisible, setIsVisible] = useState(false)
   const isFocused = useIsFocused()
 
   const handleOnFillForms = async () => {
+    setLoading(true)
+    const id = email
+    console.log('ID', id)
     try {
-      const url = '/pacientes/' + user?.email
-      const response = await api.get(url)
+      /* 
+      const url = 'pacientes/' + email */
+      const response = await api.get(`pacientes/${id}`)
+      console.log('RESPONSE FILL FORMS', response.data)
       setData(response.data)
       setName(response.data.name)
       setAge(response.data.age)
@@ -52,12 +70,14 @@ export const Profile = (patient: Patient) => {
       setAllergies(response.data.allergies)
     } catch (error) {
       console.log(error)
+    } finally {
+      setLoading(false)
     }
   }
 
   const handleOnSave = async () => {
     try {
-      await api.patch(`/pacientes/${user?.email}`, {
+      await api.patch(`/pacientes/${email}`, {
         name: name,
         phone: phone,
         age: age,
@@ -85,15 +105,22 @@ export const Profile = (patient: Patient) => {
   }
   useEffect(() => {
     if (isFocused) {
+      console.log('here')
+      console.log('PARAMS PROFILE', route.params.email)
+      setEmail(route.params.email)
       handleOnFillForms()
     }
-  }, [])
+  }, [isFocused])
 
   useEffect(() => {
     if (!edit) {
       handleOnFillForms()
     }
   }, [edit])
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#000" />
+  }
 
   return (
     <View style={styles.container}>

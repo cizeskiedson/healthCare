@@ -27,7 +27,7 @@ declare global {
       ChangePassword: undefined
       Contacts: undefined
       CreateContact: undefined
-      PatientData: { patient: Patient }
+      PatientData: { email: string }
     }
   }
 }

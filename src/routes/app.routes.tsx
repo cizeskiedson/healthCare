@@ -16,6 +16,7 @@ import { ChangePassword } from '../screens/ChangePassword'
 import { Contacts } from '../screens/Contacts'
 import { CreateContact } from '../screens/CreateContact'
 import { colors } from '../styles/colors'
+import { useRoute } from '@react-navigation/native'
 
 const AppTab = createBottomTabNavigator()
 const AppStack = createNativeStackNavigator()
@@ -60,6 +61,8 @@ const TabsDoctor = () => {
 }
 
 const TabsPatient = () => {
+  const route = useRoute()
+  console.log('PARAMS', route.params)
   return (
     <AppTab.Navigator
       screenOptions={({ route }) => ({
@@ -86,7 +89,11 @@ const TabsPatient = () => {
         <AppTab.Screen name="Resumo" component={Resume} />
         <AppTab.Screen name="Histórico" component={History} />
         <AppTab.Screen name="Contatos" component={Contacts} />
-        <AppTab.Screen name="Perfil" component={Profile} />
+        <AppTab.Screen
+          name="Perfil"
+          component={Profile}
+          initialParams={route.params}
+        />
       </>
     </AppTab.Navigator>
   )
@@ -124,6 +131,8 @@ const TabsConfident = () => {
 }
 
 const TabsPatientToDoctor = () => {
+  const route = useRoute()
+  console.log('PARAMS', route.params)
   return (
     <AppTab.Navigator
       screenOptions={({ route }) => ({
@@ -149,7 +158,11 @@ const TabsPatientToDoctor = () => {
       <>
         <AppTab.Screen name="Resumo" component={Resume} />
         <AppTab.Screen name="Histórico" component={History} />
-        <AppTab.Screen name="Perfil" component={Profile} />
+        <AppTab.Screen
+          name="Perfil"
+          component={Profile}
+          initialParams={route.params}
+        />
       </>
     </AppTab.Navigator>
   )
@@ -163,7 +176,7 @@ export const AppRoutes = () => {
         <AppStack.Screen
           name="Home"
           component={TabsPatient}
-          initialParams={{ id: user?.email, realm: user?.realm }}
+          initialParams={{ email: user?.email }}
         />
       ) : user?.realm === 'doctor' ? (
         <AppStack.Screen
@@ -186,7 +199,7 @@ export const AppRoutes = () => {
       <AppStack.Screen
         name="PatientData"
         component={TabsPatientToDoctor}
-        initialParams={{ key: 'value' }}
+        options={{ headerShown: true, headerTitle: 'Dados do paciente' }}
       />
       <AppStack.Screen
         name="Search"

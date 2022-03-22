@@ -44,6 +44,137 @@ export const CreatePatient = () => {
   const [stepPosition, setStepPosition] = useState(0)
   const navigation = useNavigation()
   const { user } = useAuth()
+  const handleEmail = async (email: string) => {
+    try {
+      console.log(email)
+      api.post('message', {
+        email: email,
+        subject: 'Confirme seu cadastro.',
+        html: `<h1>Confirmação de cadastro</h1> <p> Um novo usuário do MannaHealth te cadastrou como um contato de confiança. </p> <p> Para finalizar seu cadastro basta baixar o app MannaHealth e acessar com os dados de login abaixo, definindo sua senha definitiva: </p> <strong> Login: </strong> <p> ${email} </p> <strong> Senha: </strong> <p> 123senha </p>`,
+      })
+    } catch (error) {}
+  }
+
+  const requestNewUser = async (
+    email: string,
+    password: string,
+    realm: string
+  ) => {
+    try {
+      await api.post('signup', {
+        email,
+        password,
+        realm,
+      })
+    } catch (error) {
+      showMessage({
+        message: 'Oops!',
+        description: 'Não conseguimos concluir o cadastro do usuário!',
+        type: 'danger',
+      })
+    }
+  }
+
+  const requestNewPatient = async (
+    name: string,
+    email: string,
+    cpf: string,
+    address: string,
+    age: number | null | undefined,
+    phone: number | null | undefined,
+    bloodType: string | null | undefined,
+    healthProblems: string | null | undefined,
+    height: number | null | undefined,
+    weight: number | null | undefined,
+    observations: string | null | undefined,
+    allergies: string | null | undefined
+  ) => {
+    try {
+      await api.post('pacientes', {
+        name,
+        email,
+        cpf,
+        address,
+        age,
+        phone,
+        bloodType,
+        healthProblems,
+        height,
+        weight,
+        observations,
+        allergies,
+      })
+    } catch (error) {
+      showMessage({
+        message: 'Oops!',
+        description: 'Não conseguimos concluir o cadastro do novo paciente!',
+        type: 'danger',
+      })
+    }
+  }
+
+  const requestNewConfianca = async (
+    name: string,
+    cpf: string,
+    email: string,
+    phone: number | null | undefined
+  ) => {
+    try {
+      await api.post('confiancas', {
+        name,
+        cpf,
+        email,
+        phone,
+      })
+      await handleEmail(email)
+    } catch (error) {
+      showMessage({
+        message: 'Oops!',
+        description:
+          'Não conseguimos concluir o cadastro do contato de confiança!',
+        type: 'danger',
+      })
+    }
+  }
+
+  const requestNewMpRelation = async (
+    emailMedico: string,
+    emailPaciente: string
+  ) => {
+    try {
+      await api.post('mps', {
+        emailMedico,
+        emailPaciente,
+      })
+    } catch (error) {
+      showMessage({
+        message: 'Oops!',
+        description:
+          'Não conseguimos concluir a relação entre o paciente e o médico!',
+        type: 'danger',
+      })
+    }
+  }
+
+  const requestNewPcRelation = async (
+    emailPaciente: string,
+    emailConfianca: string
+  ) => {
+    try {
+      await api.post('pcs', {
+        emailPaciente,
+        emailConfianca,
+      })
+    } catch (error) {
+      showMessage({
+        message: 'Oops!',
+        description:
+          'Não conseguimos concluir a relação entre o paciente e o contato!',
+        type: 'danger',
+      })
+    }
+  }
+
   const handleOnSubmit = async (values: FormProps) => {
     console.log('welcome')
     const realm = 'patient'
@@ -77,12 +208,10 @@ export const CreatePatient = () => {
       addressObject.zipCode
 
     try {
-      await api.post('signup', {
-        email,
-        password,
-        realm,
-      })
-      await api.post('pacientes', {
+      console.log('hello')
+      await requestNewUser(email, password, realm)
+      await requestNewUser(emailC, '123senha', 'temp')
+      await requestNewPatient(
         name,
         email,
         cpf,
@@ -94,34 +223,25 @@ export const CreatePatient = () => {
         height,
         weight,
         observations,
-        allergies,
-      })
-      await api.post('confiancas', {
-        name: nameC,
-        cpf: cpfC,
-        email: emailC,
-        phone: phoneC,
-      })
-      await api.post('pcs', {
-        emailPaciente: email,
-        emailConfianca: emailC,
-      })
-      await api.post('mps', {
-        emailPaciente: email,
-        emailMedico: user?.email,
-      })
+        allergies
+      )
+      await requestNewConfianca(nameC, cpfC, emailC, phoneC)
+      await requestNewMpRelation(user?.email as string, email)
+      await requestNewPcRelation(email, emailC)
       showMessage({
         message: 'Sucesso!',
-        description: 'Paciente cadastrado com sucesso!',
+        description: 'Conta criada com sucesso!',
         type: 'success',
       })
-      navigation.goBack()
     } catch (error) {
       showMessage({
-        message: 'Erro!',
-        description: 'Não foi possível completar o cadastro!',
+        message: 'Oops!',
+        description: 'Não conseguimos terminar seu cadastro!',
         type: 'danger',
       })
+      console.log(error)
+    } finally {
+      navigation.goBack()
     }
   }
 
@@ -208,28 +328,17 @@ export const CreatePatient = () => {
         />
 
         <TouchableOpacity
-          style={{
-            paddingVertical: 12,
-            paddingHorizontal: 22,
-            backgroundColor: '#1dd3f8',
-            borderRadius: 8,
-          }}
+          style={styles.touchable}
           onPress={() => {
             if (stepPosition === 3) {
+              console.log(formik.values)
               formik.handleSubmit()
             } else {
               setStepPosition(oldValue => oldValue + 1)
             }
           }}
         >
-          <Text
-            style={{
-              fontSize: 16,
-              fontWeight: 'bold',
-              color: '#00042c',
-              alignSelf: 'center',
-            }}
-          >
+          <Text style={styles.textButton}>
             {stepPosition === 3 ? 'Salvar' : 'Continuar'}
           </Text>
         </TouchableOpacity>

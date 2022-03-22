@@ -23,6 +23,18 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
+  touchable: {
+    paddingVertical: 12,
+    paddingHorizontal: 22,
+    backgroundColor: colors.darkGreen,
+    borderRadius: 8,
+  },
+  textButton: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: colors.white,
+    alignSelf: 'center',
+  },
 })
 
 export const stepStyles = {

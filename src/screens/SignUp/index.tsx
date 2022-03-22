@@ -47,6 +47,118 @@ export const SignUp = () => {
   const { signIn } = useAuth()
   const navigation = useNavigation()
 
+  const handleEmail = async (email: string) => {
+    try {
+      console.log(email)
+      api.post('message', {
+        email: email,
+        subject: 'Confirme seu cadastro.',
+        html: `<h1>Confirmação de cadastro</h1> <p> Um novo usuário do MannaHealth te cadastrou como um contato de confiança. </p> <p> Para finalizar seu cadastro basta baixar o app MannaHealth e acessar com os dados de login abaixo, definindo sua senha definitiva: </p> <strong> Login: </strong> <p> ${email} </p> <strong> Senha: </strong> <p> 123senha </p>`,
+      })
+    } catch (error) {}
+  }
+
+  const requestNewUser = async (
+    email: string,
+    password: string,
+    realm: string
+  ) => {
+    try {
+      await api.post('signup', {
+        email,
+        password,
+        realm,
+      })
+    } catch (error) {
+      showMessage({
+        message: 'Oops!',
+        description: 'Não conseguimos concluir o cadastro do usuário!',
+        type: 'danger',
+      })
+    }
+  }
+
+  const requestNewPatient = async (
+    name: string,
+    email: string,
+    cpf: string,
+    address: string,
+    age: number | null | undefined,
+    phone: number | null | undefined,
+    bloodType: string | null | undefined,
+    healthProblems: string | null | undefined,
+    height: number | null | undefined,
+    weight: number | null | undefined,
+    observations: string | null | undefined,
+    allergies: string | null | undefined
+  ) => {
+    try {
+      await api.post('pacientes', {
+        name,
+        email,
+        cpf,
+        address,
+        age,
+        phone,
+        bloodType,
+        healthProblems,
+        height,
+        weight,
+        observations,
+        allergies,
+      })
+    } catch (error) {
+      showMessage({
+        message: 'Oops!',
+        description: 'Não conseguimos concluir o cadastro do novo paciente!',
+        type: 'danger',
+      })
+    }
+  }
+
+  const requestNewConfianca = async (
+    name: string,
+    cpf: string,
+    email: string,
+    phone: number | null | undefined
+  ) => {
+    try {
+      await api.post('confiancas', {
+        name,
+        cpf,
+        email,
+        phone,
+      })
+      await handleEmail(email)
+    } catch (error) {
+      showMessage({
+        message: 'Oops!',
+        description:
+          'Não conseguimos concluir o cadastro do contato de confiança!',
+        type: 'danger',
+      })
+    }
+  }
+
+  const requestNewPcRelation = async (
+    emailPaciente: string,
+    emailConfianca: string
+  ) => {
+    try {
+      await api.post('pcs', {
+        emailPaciente,
+        emailConfianca,
+      })
+    } catch (error) {
+      showMessage({
+        message: 'Oops!',
+        description:
+          'Não conseguimos concluir a relação entre o paciente e o contato!',
+        type: 'danger',
+      })
+    }
+  }
+
   const handleOnSubmit = async (values: FormProps) => {
     console.log('welcome')
     const realm = 'patient'
@@ -81,18 +193,10 @@ export const SignUp = () => {
 
     try {
       console.log('hello')
-      await api.post('signup', {
-        email,
-        password,
-        realm,
-      })
-      await api.post('signup', {
-        email: emailC,
-        password: '123senha',
-        realm: 'temp',
-      })
+      await requestNewUser(email, password, realm)
+      await requestNewUser(emailC, '123senha', 'temp')
       await signIn(email, password)
-      await api.post('pacientes', {
+      await requestNewPatient(
         name,
         email,
         cpf,
@@ -104,18 +208,10 @@ export const SignUp = () => {
         height,
         weight,
         observations,
-        allergies,
-      })
-      await api.post('confiancas', {
-        name: nameC,
-        cpf: cpfC,
-        email: emailC,
-        phone: phoneC,
-      })
-      await api.post('pcs', {
-        emailPaciente: email,
-        emailConfianca: emailC,
-      })
+        allergies
+      )
+      await requestNewConfianca(nameC, cpfC, emailC, phoneC)
+      await requestNewPcRelation(email, emailC)
       showMessage({
         message: 'Sucesso!',
         description: 'Conta criada com sucesso!',
