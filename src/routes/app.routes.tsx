@@ -17,6 +17,7 @@ import { Contacts } from '../screens/Contacts'
 import { CreateContact } from '../screens/CreateContact'
 import { colors } from '../styles/colors'
 import { useRoute } from '@react-navigation/native'
+import { requestScanPermission } from '../utils/bluetooth'
 
 const AppTab = createBottomTabNavigator()
 const AppStack = createNativeStackNavigator()
@@ -61,8 +62,9 @@ const TabsDoctor = () => {
 }
 
 const TabsPatient = () => {
+  console.log('requesting permission to scan')
+  requestScanPermission()
   const route = useRoute()
-  console.log('PARAMS', route.params)
   return (
     <AppTab.Navigator
       screenOptions={({ route }) => ({

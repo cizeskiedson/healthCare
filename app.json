@@ -24,11 +24,14 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.cizesk.healthCare"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
-    
+    },
+    "plugins": [
+      "@config-plugins/react-native-ble-plx"
+    ]
   }
 }
