@@ -31,7 +31,7 @@
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "@config-plugins/react-native-ble-plx"
+      "expo-task-manager-bug-fix"
     ]
   }
 }

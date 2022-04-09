@@ -17,7 +17,7 @@ import { Contacts } from '../screens/Contacts'
 import { CreateContact } from '../screens/CreateContact'
 import { colors } from '../styles/colors'
 import { useRoute } from '@react-navigation/native'
-import { requestScanPermission } from '../utils/bluetooth'
+import { BluetoothModule } from '../utils/bluetooth'
 
 const AppTab = createBottomTabNavigator()
 const AppStack = createNativeStackNavigator()
@@ -62,8 +62,8 @@ const TabsDoctor = () => {
 }
 
 const TabsPatient = () => {
-  console.log('requesting permission to scan')
-  requestScanPermission()
+  console.log('start bluetooth module')
+  BluetoothModule()
   const route = useRoute()
   return (
     <AppTab.Navigator
@@ -88,9 +88,21 @@ const TabsPatient = () => {
       })}
     >
       <>
-        <AppTab.Screen name="Resumo" component={Resume} />
-        <AppTab.Screen name="Histórico" component={History} />
-        <AppTab.Screen name="Contatos" component={Contacts} />
+        <AppTab.Screen
+          name="Resumo"
+          component={Resume}
+          initialParams={route.params}
+        />
+        <AppTab.Screen
+          name="Histórico"
+          component={History}
+          initialParams={route.params}
+        />
+        <AppTab.Screen
+          name="Contatos"
+          component={Contacts}
+          initialParams={route.params}
+        />
         <AppTab.Screen
           name="Perfil"
           component={Profile}
@@ -102,6 +114,7 @@ const TabsPatient = () => {
 }
 
 const TabsConfident = () => {
+  const route = useRoute()
   return (
     <AppTab.Navigator
       screenOptions={({ route }) => ({
@@ -125,8 +138,16 @@ const TabsConfident = () => {
       })}
     >
       <>
-        <AppTab.Screen name="Resumo" component={Resume} />
-        <AppTab.Screen name="Histórico" component={History} />
+        <AppTab.Screen
+          name="Resumo"
+          component={Resume}
+          initialParams={route.params}
+        />
+        <AppTab.Screen
+          name="Histórico"
+          component={History}
+          initialParams={route.params}
+        />
       </>
     </AppTab.Navigator>
   )
@@ -158,8 +179,16 @@ const TabsPatientToDoctor = () => {
       })}
     >
       <>
-        <AppTab.Screen name="Resumo" component={Resume} />
-        <AppTab.Screen name="Histórico" component={History} />
+        <AppTab.Screen
+          name="Resumo"
+          component={Resume}
+          initialParams={route.params}
+        />
+        <AppTab.Screen
+          name="Histórico"
+          component={History}
+          initialParams={route.params}
+        />
         <AppTab.Screen
           name="Perfil"
           component={Profile}

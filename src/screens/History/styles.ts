@@ -11,7 +11,10 @@ export const styles = StyleSheet.create({
   options: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    position: 'relative',
     zIndex: 1,
+    height: 180,
+    marginBottom: -150,
   },
   headerOptions: {
     fontWeight: 'bold',
@@ -29,6 +32,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: colors.divider,
     marginVertical: 20,
+    marginTop: 50,
   },
   content: {
     flex: 1,
@@ -50,5 +54,10 @@ export const styles = StyleSheet.create({
   dataTitle: {
     fontWeight: 'bold',
     padding: 5,
+  },
+  selectFilter: {
+    color: colors.darkGray,
+    fontSize: 16,
+    alignSelf: 'center',
   },
 })
