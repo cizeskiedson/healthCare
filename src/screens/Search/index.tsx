@@ -11,12 +11,8 @@ import {
 import { Searchbar } from 'react-native-paper'
 import { useIsFocused } from '@react-navigation/native'
 import { Modal } from '../../components/Modal'
-import {
-  getPatients,
-  getPatientsByDoctor,
-  Patient,
-} from '../../services/doctor'
-
+import { getPatients, getPatientsByDoctor } from '../../services/doctor'
+import { Patient } from '../../types'
 import { useAuth } from '../../context/auth'
 import { showMessage } from 'react-native-flash-message'
 import { Feather } from '@expo/vector-icons'

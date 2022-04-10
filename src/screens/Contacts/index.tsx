@@ -12,16 +12,10 @@ import { Feather } from '@expo/vector-icons'
 import { useNavigation, useIsFocused } from '@react-navigation/native'
 import { Modal } from '../../components/Modal'
 import { useAuth } from '../../context/auth'
-import { getContactsByPatient, Contact } from '../../services/patient'
+import { getContactsByPatient } from '../../services/patient'
 import { styles } from './styles'
 import api from '../../services/api'
-import { colors } from 'react-native-elements'
-
-export type Pc = {
-  id: string
-  emailPaciente: string
-  emailConfianca: string
-}
+import { Pc, Contact } from '../../types'
 
 export const Contacts = () => {
   const { user } = useAuth()

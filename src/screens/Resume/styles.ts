@@ -39,4 +39,21 @@ export const styles = StyleSheet.create({
   input: {
     padding: 5,
   },
+  inputActivity: {
+    padding: 5,
+    fontSize: 50,
+    fontFamily: 'sans-serif-medium',
+  },
+  textInBox: {
+    flexDirection: 'row',
+  },
+  textInBoxReverse: {
+    flexDirection: 'row-reverse',
+  },
+  activityText: {
+    padding: 5,
+    paddingTop: 43,
+    color: colors.darkGray,
+    fontWeight: 'bold',
+  },
 })

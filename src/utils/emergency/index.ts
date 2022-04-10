@@ -1,13 +1,5 @@
 import api from '../../services/api'
-
-export type AlertProps = {
-  email: string
-  name: string
-  local: string
-  bpm: string
-  atividade: string
-  oxigenio: string
-}
+import { AlertProps } from '../../types'
 
 export const alertMessage = (props: AlertProps) => {
   try {

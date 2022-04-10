@@ -25,12 +25,7 @@ import { colors } from '../../styles/colors'
 import { styles } from './styles'
 import illustrationImg from '../../assets/health-illustration.png'
 
-type FormProps = {
-  email: string
-  password: string
-}
-
-export type UserType = 'patient' | 'doctor' | 'temp' | 'confident'
+import { SignInProps, UserType } from '../../types'
 
 export const SignIn = () => {
   const navigation = useNavigation()
@@ -39,7 +34,7 @@ export const SignIn = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isVisible, setIsVisible] = useState(false)
 
-  const handleOnSignIn = async (values: FormProps) => {
+  const handleOnSignIn = async (values: SignInProps) => {
     setIsLoading(true)
     const { email, password } = values
 
@@ -56,7 +51,7 @@ export const SignIn = () => {
     }
   }
 
-  const formik = useFormik<FormProps>({
+  const formik = useFormik<SignInProps>({
     initialValues: {
       email: '',
       password: '',

@@ -13,8 +13,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'space-between',
     position: 'relative',
     zIndex: 1,
-    height: 180,
-    marginBottom: -150,
+    height: 160,
+    marginBottom: -140,
   },
   headerOptions: {
     fontWeight: 'bold',

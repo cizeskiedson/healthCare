@@ -3,22 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import api from '../services/api'
 
-type User = {
-  email: string
-  emailVerified: boolean
-  id: string
-  realm: string
-  username: string
-  verificationToken: string
-}
-
-type AuthContextProps = {
-  signed: boolean
-  user: User | null
-  loading: boolean
-  signIn(email: string, password: string): Promise<void>
-  signOut(): void
-}
+import { User, AuthContextProps } from '../types'
 
 export const AuthContext = createContext<AuthContextProps>(
   {} as AuthContextProps

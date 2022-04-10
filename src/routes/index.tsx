@@ -4,10 +4,9 @@ import { NavigationContainer } from '@react-navigation/native'
 
 import { AuthRoutes } from './auth.routes'
 import { AppRoutes } from './app.routes'
-import { UserType } from '../screens/SignIn'
+import { UserType } from '../types'
 
 import { useAuth } from '../context/auth'
-import { Patient } from '../services/doctor'
 
 declare global {
   namespace ReactNavigation {

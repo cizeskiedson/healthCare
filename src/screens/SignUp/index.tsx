@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
-import { Button, colors } from 'react-native-elements'
+import { Button } from 'react-native-elements'
 
 import { useNavigation } from '@react-navigation/native'
 
@@ -16,30 +16,7 @@ import { FormStep } from './components/FormStep'
 import api from '../../services/api'
 import { showMessage } from 'react-native-flash-message'
 
-type FormProps = {
-  name: string
-  cpf: string /* x */
-  email: string
-  age?: number | null
-  phone?: number | null
-  password: string
-  addressObject: {
-    /* x Object -> string */ street: string
-    number: number | null
-    neighborhood: string
-    zipCode: string
-  }
-  bloodType?: string
-  healthProblems?: string
-  height?: number | null
-  weight?: number | null
-  observations?: string
-  allergies?: string
-  nameC: string
-  cpfC: string /* x */
-  emailC: string
-  phoneC?: number | null
-}
+import { SignUpProps } from '../../types'
 
 export const SignUp = () => {
   const [stepPosition, setStepPosition] = useState(0)
@@ -159,7 +136,7 @@ export const SignUp = () => {
     }
   }
 
-  const handleOnSubmit = async (values: FormProps) => {
+  const handleOnSubmit = async (values: SignUpProps) => {
     console.log('welcome')
     const realm = 'patient'
     const {
@@ -227,7 +204,7 @@ export const SignUp = () => {
     }
   }
 
-  const formik = useFormik<FormProps>({
+  const formik = useFormik<SignUpProps>({
     initialValues: {
       name: '',
       email: '',

@@ -13,18 +13,13 @@ import api from '../../services/api'
 import { showMessage } from 'react-native-flash-message'
 import { Input } from '../../components/Input'
 
-type FormProps = {
-  name: string
-  cpf: string /* x */
-  email: string
-  phone?: number | null
-}
+import { FormContact } from '../../types'
 
 export const CreateContact = () => {
   const { user } = useAuth()
   const navigation = useNavigation()
 
-  const handleOnSubmit = async (values: FormProps) => {
+  const handleOnSubmit = async (values: FormContact) => {
     const { name, cpf, phone, email } = values
 
     try {
@@ -54,7 +49,7 @@ export const CreateContact = () => {
     }
   }
 
-  const formik = useFormik<FormProps>({
+  const formik = useFormik<FormContact>({
     initialValues: {
       name: '',
       cpf: '',

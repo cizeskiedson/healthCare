@@ -15,30 +15,7 @@ import { FormStep } from './components/FormStep'
 
 import api from '../../services/api'
 
-type FormProps = {
-  name: string
-  cpf: string /* x */
-  email: string
-  age?: number | null
-  phone?: number | null
-  password: string
-  addressObject: {
-    street: string
-    number: number | null
-    neighborhood: string
-    zipCode: string
-  }
-  bloodType?: string
-  healthProblems?: string
-  height?: number | null
-  weight?: number | null
-  observations?: string
-  allergies?: string
-  nameC: string
-  cpfC: string /* x */
-  emailC: string
-  phoneC?: number | null
-}
+import { SignUpProps } from '../../types'
 
 export const CreatePatient = () => {
   const [stepPosition, setStepPosition] = useState(0)
@@ -175,7 +152,7 @@ export const CreatePatient = () => {
     }
   }
 
-  const handleOnSubmit = async (values: FormProps) => {
+  const handleOnSubmit = async (values: SignUpProps) => {
     console.log('welcome')
     const realm = 'patient'
     const {
@@ -245,7 +222,7 @@ export const CreatePatient = () => {
     }
   }
 
-  const formik = useFormik<FormProps>({
+  const formik = useFormik<SignUpProps>({
     initialValues: {
       name: '',
       email: '',

@@ -1,18 +1,56 @@
-import React from 'react'
-import { Text, TouchableOpacity, View } from 'react-native'
-import { useAuth } from '../../context/auth'
+import React, { useState, useEffect } from 'react'
+import { Text, View } from 'react-native'
+import { ActivityIndicator } from 'react-native-paper'
+import { useIsFocused } from '@react-navigation/native'
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { styles } from './styles'
 
-export type Mensagem = {
-  email: string
-  subject: string
-  html: string
-}
-
 export const Resume = () => {
-  const { signOut, user } = useAuth()
+  const isFocused = useIsFocused()
+  const [loading, setLoading] = useState(true)
+  const [distance, setDistance] = useState('')
+  const [fall, setFall] = useState<undefined | string | null>(
+    'Dados das quedas aqui...'
+  )
+  const [steps, setSteps] = useState<undefined | string | null>(
+    'Dados das atividades aqui..'
+  )
 
+  const getData = async () => {
+    setLoading(true)
+    try {
+      setSteps(await AsyncStorage.getItem('@healthCare:steps'))
+      console.log('STEPS', steps)
+      setFall(await AsyncStorage.getItem('@healthCare:fall'))
+      console.log('FALLS', fall)
+      setDistance(JSON.stringify(0.82 * Number(steps)))
+      setLoading(false)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  /*   const setData = async () => {
+    try {
+      await AsyncStorage.setItem('@healthCare:steps', '20')
+      await AsyncStorage.setItem('@healthCare:fall', '1')
+    } catch (error) {
+      console.log(error)
+    }
+  } */
+
+  useEffect(() => {
+    if (isFocused) {
+      /* 
+      setData() */
+      getData()
+    }
+  }, [isFocused])
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#000" />
+  }
   return (
     <View style={styles.container}>
       <View style={styles.content}>
@@ -28,14 +66,16 @@ export const Resume = () => {
         </View>
         <Text style={styles.header}>Atividade</Text>
         <View style={styles.box}>
-          <Text style={styles.input}>
-            Dados sobre atividades recentes aqui...
-          </Text>
+          <View style={styles.textInBox}>
+            <Text style={styles.inputActivity}>{steps}</Text>
+            <Text style={styles.activityText}>passos hoje.</Text>
+          </View>
+          <View style={styles.textInBoxReverse}>
+            <Text style={styles.activityText}>metros.</Text>
+            <Text style={styles.inputActivity}>{distance}</Text>
+          </View>
         </View>
       </View>
-      <TouchableOpacity style={styles.button} onPress={() => handleClick()}>
-        <Text style={styles.buttonText}>Estado de alerta</Text>
-      </TouchableOpacity>
     </View>
   )
 }

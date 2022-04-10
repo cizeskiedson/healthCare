@@ -13,16 +13,7 @@ import api from '../../services/api'
 import { showMessage } from 'react-native-flash-message'
 
 import { validate } from 'gerador-validador-cpf'
-
-type FormProps = {
-  name: string
-  cpf: string
-  crm: string
-  email: string
-  phone: string
-  area: string
-  password: string
-}
+import { SignUpDocProps } from '../../types'
 
 export const SignUpDoc = () => {
   const navigation = useNavigation()
@@ -31,7 +22,7 @@ export const SignUpDoc = () => {
 
   const [error, setError] = useState(false)
 
-  const handleOnSubmit = async (values: FormProps) => {
+  const handleOnSubmit = async (values: SignUpDocProps) => {
     console.log('teste')
     const { name, cpf, crm, email, phone, area, password } = values
     const realm = 'doctor'
@@ -74,7 +65,7 @@ export const SignUpDoc = () => {
     setError(false)
   }
 
-  const formik = useFormik<FormProps>({
+  const formik = useFormik<SignUpDocProps>({
     initialValues: {
       name: '',
       cpf: '',

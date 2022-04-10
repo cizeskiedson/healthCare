@@ -11,7 +11,7 @@ import { Feather } from '@expo/vector-icons'
 
 import { useIsFocused } from '@react-navigation/native'
 
-import { Doctor } from '../../services/doctor'
+import { Doctor } from '../../types'
 
 import { showMessage } from 'react-native-flash-message'
 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import {
-  Text,
   View,
   TouchableOpacity,
   ScrollView,
@@ -16,31 +15,15 @@ import { useAuth } from '../../context/auth'
 import { useIsFocused, useRoute, RouteProp } from '@react-navigation/native'
 
 import { Feather } from '@expo/vector-icons'
-import { Patient } from '../../services/doctor'
 
 import { showMessage } from 'react-native-flash-message'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
 
-type ParamList = {
-  Profile: {
-    email: string
-  }
-}
+import { ParamsProfile, Patient } from '../../types'
 
 export const Profile = () => {
-  const { user } = useAuth()
-  const route = useRoute<RouteProp<ParamList, 'Profile'>>()
-  const [email, setEmail] = useState('')
-  const [data, setData] = useState<Patient>()
-  const [name, setName] = useState('')
-  const [age, setAge] = useState('')
-  const [allergies, setAllergies] = useState('')
-  const [bloodType, setBloodtype] = useState('')
-  const [healthProblems, setHealthProblems] = useState('')
-  const [phone, setPhone] = useState('')
-  const [height, setHeight] = useState('')
-  const [weight, setWeight] = useState('')
-  const [address, setAddress] = useState('')
-  const [observations, setObservations] = useState('')
+  const route = useRoute<RouteProp<ParamsProfile, 'Profile'>>()
 
   const [loading, setLoading] = useState(false)
   const [edit, setEdit] = useState(false)
@@ -48,26 +31,14 @@ export const Profile = () => {
   const [isVisible, setIsVisible] = useState(false)
   const isFocused = useIsFocused()
 
-  const handleOnFillForms = async () => {
+  const handleOnFillForms = async (email: string) => {
     setLoading(true)
-    const id = email
-    console.log('ID', id)
     try {
-      /* 
-      const url = 'pacientes/' + email */
-      const response = await api.get(`pacientes/${id}`)
-      console.log('RESPONSE FILL FORMS', response.data)
-      setData(response.data)
-      setName(response.data.name)
-      setAge(response.data.age)
-      setPhone(response.data.phone)
-      setBloodtype(response.data.bloodType)
-      setHealthProblems(response.data.healthProblems)
-      setHeight(response.data.height)
-      setWeight(response.data.weight)
-      setAddress(response.data.address)
-      setObservations(response.data.observations)
-      setAllergies(response.data.allergies)
+      console.log('EMAIL', email)
+      const { data } = await api.get(`pacientes/${email}`)
+      console.log('RESPONSE FILL FORMS', data)
+
+      formik.setValues(data)
     } catch (error) {
       console.log(error)
     } finally {
@@ -75,26 +46,42 @@ export const Profile = () => {
     }
   }
 
-  const handleOnSave = async () => {
+  const handleOnSubmit = async (values: Patient, email: string) => {
     try {
-      await api.patch(`/pacientes/${email}`, {
-        name: name,
-        phone: phone,
-        age: age,
-        address: address,
-        bloodType: bloodType,
-        healthProblems: healthProblems,
-        height: height,
-        weight: weight,
-        allergies: allergies,
-        observations: observations,
-      })
-      showMessage({
-        message: 'Sucesso!',
-        description: 'Novas informações salvas com sucesso!',
-        type: 'success',
-      })
-      setEdit(false)
+      if (values) {
+        const {
+          name,
+          phone,
+          age,
+          address,
+          bloodType,
+          healthProblems,
+          height,
+          weight,
+          allergies,
+          observations,
+        } = values
+
+        await api.patch(`/pacientes/${email}`, {
+          name: name,
+          phone: phone,
+          age: age,
+          address: address,
+          bloodType: bloodType,
+          healthProblems: healthProblems,
+          height: height,
+          weight: weight,
+          allergies: allergies,
+          observations: observations,
+        })
+        showMessage({
+          message: 'Sucesso!',
+          description: 'Novas informações salvas com sucesso!',
+          type: 'success',
+        })
+        setEdit(false)
+        handleOnFillForms(email)
+      }
     } catch (error) {
       showMessage({
         message: 'Oops!',
@@ -107,16 +94,49 @@ export const Profile = () => {
     if (isFocused) {
       console.log('here')
       console.log('PARAMS PROFILE', route.params.email)
-      setEmail(route.params.email)
-      handleOnFillForms()
+      handleOnFillForms(route.params.email)
     }
   }, [isFocused])
-
+  /* 
   useEffect(() => {
     if (!edit) {
-      handleOnFillForms()
+      handleOnFillForms(route.params.email)
     }
-  }, [edit])
+  }, [edit]) */
+
+  const formik = useFormik<Patient>({
+    initialValues: {
+      name: '',
+      email: '',
+      cpf: '',
+      address: '',
+      age: '',
+      phone: '',
+      bloodType: '',
+      healthProblems: '',
+      height: '',
+      weight: '',
+      observations: '',
+      allergies: '',
+    },
+    validationSchema: Yup.object().shape({
+      name: Yup.string().required(),
+      cpf: Yup.string()
+        .matches(/^\d{3}\d{3}\d{3}\d{2}$/, 'CPF inválido.')
+        .required('CPF é um campo obrigatório.'),
+      email: Yup.string().required(),
+      address: Yup.string().required(),
+      age: Yup.string(),
+      phone: Yup.string(),
+      bloodType: Yup.string(),
+      healthProblems: Yup.string(),
+      height: Yup.string(),
+      weight: Yup.string(),
+      observations: Yup.string(),
+      allergies: Yup.string(),
+    }),
+    onSubmit: values => handleOnSubmit(values, route.params.email),
+  })
 
   if (loading) {
     return <ActivityIndicator size="large" color="#000" />
@@ -156,7 +176,7 @@ export const Profile = () => {
             justifyContent: 'center',
           }}
           onPress={() => {
-            handleOnSave()
+            formik.handleSubmit()
           }}
         >
           <Feather
@@ -197,24 +217,23 @@ export const Profile = () => {
             label="Nome"
             placeholder="Digite seu nome"
             editable={edit}
-            value={name}
-            onChangeText={value => setName(value)}
+            formik={formik}
           />
           <Input
-            name="cpfString"
+            name="cpf"
             label="CPF"
             placeholder="Digite seu cpf"
             maxLength={11}
             keyboardType="numeric"
             editable={false}
-            value={data?.cpf}
+            formik={formik}
           />
           <Input
             name="email"
             label="E-mail"
             placeholder="Digite seu email"
             editable={false}
-            value={data?.email}
+            formik={formik}
           />
 
           <Input
@@ -223,8 +242,7 @@ export const Profile = () => {
             placeholder="Digite sua idade"
             keyboardType="numeric"
             editable={edit}
-            value={age}
-            onChangeText={value => setAge(value)}
+            formik={formik}
           />
 
           <Input
@@ -234,16 +252,14 @@ export const Profile = () => {
             maxLength={11}
             keyboardType="numeric"
             editable={edit}
-            value={phone}
-            onChangeText={value => setPhone(value)}
+            formik={formik}
           />
           <Input
             name="address"
             label="Endereço"
             placeholder="Digite seu endereço"
             editable={edit}
-            value={address}
-            onChangeText={value => setAddress(value)}
+            formik={formik}
           />
           <Input
             name="bloodType"
@@ -251,8 +267,7 @@ export const Profile = () => {
             placeholder="Digite seu tipo sanguíneo"
             maxLength={3}
             editable={edit}
-            value={bloodType}
-            onChangeText={value => setBloodtype(value)}
+            formik={formik}
           />
           <Input
             multiline
@@ -261,8 +276,7 @@ export const Profile = () => {
             label="Problemas de Saúde"
             placeholder="Informe seus problemas de saúde"
             editable={edit}
-            value={healthProblems}
-            onChangeText={value => setHealthProblems(value)}
+            formik={formik}
           />
           <Input
             name="height"
@@ -270,8 +284,7 @@ export const Profile = () => {
             placeholder="Digite sua altura"
             keyboardType="numeric"
             editable={edit}
-            value={height}
-            onChangeText={value => setHeight(value)}
+            formik={formik}
           />
           <Input
             name="weight"
@@ -279,8 +292,7 @@ export const Profile = () => {
             placeholder="Digite seu peso"
             keyboardType="numeric"
             editable={edit}
-            value={weight}
-            onChangeText={value => setWeight(value)}
+            formik={formik}
           />
           <Input
             multiline
@@ -289,8 +301,7 @@ export const Profile = () => {
             label="Alergias"
             placeholder="Informe suas alergias"
             editable={edit}
-            value={allergies}
-            onChangeText={value => setAllergies(value)}
+            formik={formik}
           />
           <Input
             multiline
@@ -299,8 +310,7 @@ export const Profile = () => {
             label="Observações"
             placeholder="Algo mais?"
             editable={edit}
-            value={observations}
-            onChangeText={value => setObservations(value)}
+            formik={formik}
           />
         </ScrollView>
         <Modal

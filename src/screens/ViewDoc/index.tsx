@@ -1,43 +1,88 @@
-import React, { useState, useEffect } from 'react'
-import { Text, View, TouchableOpacity, Button, Modal } from 'react-native'
-
-import { Searchbar, DataTable } from 'react-native-paper'
-
+import React, { useState, useEffect, useCallback } from 'react'
+import {
+  View,
+  Text,
+  ActivityIndicator,
+  FlatList,
+  TouchableOpacity,
+} from 'react-native'
+import { Searchbar } from 'react-native-paper'
+import { showMessage } from 'react-native-flash-message'
 import { Feather } from '@expo/vector-icons'
-import { styles } from './styles'
-
+import { useNavigation, useIsFocused } from '@react-navigation/native'
+import { Modal } from '../../components/Modal'
 import { useAuth } from '../../context/auth'
-import { useNavigation } from '@react-navigation/native'
-
+import { getPatientsByDoctor } from '../../services/doctor'
+import { styles } from './styles'
 import api from '../../services/api'
-
-const numberOfItemsPerPageList = [2, 3, 4]
+import { Mp, Patient } from '../../types'
 
 export const ViewDoc = () => {
-  const { user, signOut } = useAuth()
-  const navigation = useNavigation()
-  let email = ''
-  if (user != null) {
-    email = user.email
-  }
-  const [loadingData, setLoadingData] = useState(true)
+  const { user } = useAuth()
+
+  const [patients, setPatients] = useState<Patient[] | []>([])
+  const [originalPatients, setOriginalPatients] = useState<Patient[] | []>([])
+  const [loading, setLoading] = useState(false)
+  const [searchText, setSearchText] = useState('')
   const [isVisible, setIsVisible] = useState(false)
-  const [data, setData] = useState([])
+  const [delPatient, setDelPatient] = useState<Patient>()
+  const isFocused = useIsFocused()
+  const navigation = useNavigation()
 
-  const [page, setPage] = React.useState(0)
-  const [numberOfItemsPerPage, onItemsPerPageChange] = React.useState(
-    numberOfItemsPerPageList[0]
-  )
-  const from = page * numberOfItemsPerPage
-  const to = Math.min((page + 1) * numberOfItemsPerPage, data.length)
+  const handlePatients = async (): Promise<void> => {
+    setLoading(true)
 
-  const navigateToSignUp = () => {
-    setIsVisible(false)
-
-    setTimeout(() => {
-      navigation.navigate('SignUp', { userType: 'doctor' })
-    }, 200)
+    try {
+      setPatients(await getPatientsByDoctor(user?.email as string))
+      setOriginalPatients(await getPatientsByDoctor(user?.email as string))
+    } catch (error) {
+      showMessage({
+        message: 'Oops!',
+        description: 'Não foi possível carregar os pacientes',
+        type: 'danger',
+      })
+    } finally {
+      setLoading(false)
+    }
   }
+
+  const keyExtractor = useCallback((item: Patient) => String(item.cpf), [])
+
+  const renderItem = useCallback(
+    ({ item }: { item: Patient }) => (
+      <View style={styles.card}>
+        <View>
+          <View style={styles.cardTitle}>
+            <Text style={styles.descriptionBold}>Nome: </Text>
+            <Text style={styles.description}>{item.name}</Text>
+          </View>
+
+          <View style={styles.cardTitle}>
+            <Text style={styles.descriptionBold}>Idade: </Text>
+            <Text style={styles.description}>{item.age} anos</Text>
+          </View>
+
+          <View style={styles.cardTitle}>
+            <Text style={styles.descriptionBold}>E-mail: </Text>
+            <Text style={styles.description}>{item.email}</Text>
+          </View>
+        </View>
+
+        <View style={styles.actions}>
+          <TouchableOpacity onPress={() => handlePressEdit(item)}>
+            <Feather name="external-link" size={22} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{ marginTop: 8 }}
+            onPress={() => handlePressDelete(item)}
+          >
+            <Feather name="trash" size={22} />
+          </TouchableOpacity>
+        </View>
+      </View>
+    ),
+    []
+  )
 
   const navigateToSearch = () => {
     setIsVisible(false)
@@ -46,181 +91,122 @@ export const ViewDoc = () => {
       navigation.navigate('Search')
     }, 200)
   }
+  const navigateToSignUp = () => {
+    setIsVisible(false)
+
+    setTimeout(() => {
+      navigation.navigate('CreatePatient')
+    }, 200)
+  }
+
+  const handlePressEdit = (item: Patient) => {
+    setTimeout(() => {
+      navigation.navigate('PatientData', { email: item.email })
+    }, 200)
+  }
+
+  const handlePressDelete = (item: Patient) => {
+    setIsVisible(true)
+    setDelPatient(item)
+  }
+
+  const handleDelete = async () => {
+    setIsVisible(false)
+    if (delPatient !== undefined) {
+      try {
+        const response = await api.get('mps')
+        const data = response.data
+        console.log('DATA', data)
+        const toRemove = data.find(
+          (e: Mp) =>
+            e.emailPaciente === delPatient.email &&
+            e.emailMedico === user?.email
+        )
+        if (toRemove !== undefined) {
+          await api.delete(`mps/${toRemove.id}`)
+          showMessage({
+            message: 'Sucesso!',
+            description: 'Remoção feita com êxito',
+            type: 'success',
+          })
+          handlePatients()
+        }
+      } catch (error) {
+        showMessage({
+          message: 'Oops!',
+          description: 'Não foi possível remover o paciente',
+          type: 'danger',
+        })
+      }
+    }
+  }
 
   useEffect(() => {
-    async function getData() {
-      const url = 'medicos/' + email + '/pacientes'
-      await api.get(url).then(response => {
-        // check if the data is populated
-        console.log(response.data)
-        setData(response.data)
-        // you tell it that you had the result
-        setLoadingData(false)
-      })
+    if (isFocused) {
+      console.log('called')
+      handlePatients()
     }
-    if (loadingData) {
-      // if the result is not ready so you make the axios call
-      getData()
-    }
-  }, [])
+  }, [isFocused])
 
   useEffect(() => {
-    setPage(0)
-  }, [numberOfItemsPerPage])
+    if (searchText === '') {
+      setPatients(originalPatients)
+    } else {
+      setPatients(
+        patients.filter(
+          item =>
+            item.name.toLowerCase().indexOf(searchText.toLowerCase()) > -1 ||
+            item.email.toLowerCase().indexOf(searchText.toLowerCase()) > -1
+        )
+      )
+    }
+  }, [searchText])
+
+  if (loading) {
+    return <ActivityIndicator size="large" color="#000" />
+  }
+
   return (
     <View style={styles.container}>
-      {loadingData ? (
-        <Text>Carregando dados...</Text>
-      ) : (
-        <>
-          <Searchbar placeholder="Buscar paciente..." />
-          <View style={styles.content}>
-            <DataTable>
-              <DataTable.Header>
-                <DataTable.Title>Nome</DataTable.Title>
-                <DataTable.Title>Email</DataTable.Title>
-                <DataTable.Title numeric>Age</DataTable.Title>
-              </DataTable.Header>
+      <Searchbar
+        placeholder="Buscar pacientes..."
+        onChangeText={text => setSearchText(text)}
+        value={searchText}
+      />
 
-              <DataTable.Row>
-                <DataTable.Cell>{data[1].name}</DataTable.Cell>
-                <DataTable.Cell>john@kindacode.com</DataTable.Cell>
-                <DataTable.Cell numeric>12</DataTable.Cell>
-              </DataTable.Row>
+      <FlatList
+        data={patients}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
+      />
 
-              <DataTable.Row>
-                <DataTable.Cell>Bob</DataTable.Cell>
-                <DataTable.Cell>test@test.com</DataTable.Cell>
-                <DataTable.Cell numeric>105</DataTable.Cell>
-              </DataTable.Row>
-
-              <DataTable.Row>
-                <DataTable.Cell>Mei</DataTable.Cell>
-                <DataTable.Cell>mei@kindacode.com</DataTable.Cell>
-                <DataTable.Cell numeric>23</DataTable.Cell>
-              </DataTable.Row>
-              <DataTable.Pagination
-                page={page}
-                numberOfPages={Math.ceil(data.length / numberOfItemsPerPage)}
-                onPageChange={page => setPage(page)}
-                label={`${from + 1}-${to} of ${data.length}`}
-                showFastPaginationControls
-                numberOfItemsPerPageList={numberOfItemsPerPageList}
-                numberOfItemsPerPage={numberOfItemsPerPage}
-                onItemsPerPageChange={onItemsPerPageChange}
-                selectPageDropdownLabel={'Rows per page'}
-              />
-            </DataTable>
-          </View>
-          <TouchableOpacity
-            style={styles.touchable}
-            onPress={() => setIsVisible(true)}
-          >
-            <Feather
-              name="plus"
-              style={{
-                fontSize: 16,
-                color: '#000',
-                letterSpacing: 0.5,
-              }}
-            >
-              Adicionar novo paciente
-            </Feather>
-          </TouchableOpacity>
-          <Modal
-            visible={isVisible}
-            transparent
-            style={{}}
-            onRequestClose={() => setIsVisible(false)}
-          >
-            <View
-              style={{
-                flex: 1,
-                backgroundColor: 'rgba(0, 0, 0, 0.4)',
-                justifyContent: 'center',
-                alignItems: 'center',
-                padding: 14,
-              }}
-            >
-              <View
-                style={{
-                  width: '100%',
-                  backgroundColor: 'white',
-                  padding: 14,
-                  borderRadius: 8,
-                }}
-              >
-                <View>
-                  <Text style={{ fontSize: 22, fontWeight: 'bold' }}>
-                    Associar novo paciente
-                  </Text>
-                  <Text style={{ color: '#959595', marginTop: 8 }}>
-                    Precisamos que informe se deseja buscar um usuário no
-                    sistema, ou se deseja cadastrar um novo paciente.
-                  </Text>
-
-                  <View
-                    style={{
-                      height: 2,
-                      width: '100%',
-                      backgroundColor: '#D9D9D9',
-                      marginVertical: 20,
-                    }}
-                  />
-                </View>
-
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                  }}
-                >
-                  <TouchableOpacity
-                    style={{
-                      paddingVertical: 12,
-                      paddingHorizontal: 22,
-                      backgroundColor: '#1dd3f8',
-                      borderRadius: 8,
-                    }}
-                    onPress={() => navigateToSearch()}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        fontWeight: 'bold',
-                        color: '#00042c',
-                      }}
-                    >
-                      Buscar
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={{
-                      paddingVertical: 12,
-                      paddingHorizontal: 22,
-                      backgroundColor: '#00042c',
-                      borderRadius: 8,
-                    }}
-                    onPress={() => navigateToSignUp()}
-                  >
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        fontWeight: 'bold',
-                        color: '#1dd3f8',
-                      }}
-                    >
-                      Novo paciente
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </Modal>
-        </>
-      )}
+      <View style={styles.options}>
+        <TouchableOpacity
+          style={styles.touchable}
+          onPress={() => navigateToSignUp()}
+        >
+          <Text style={styles.textNew}>Novo paciente</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.touchable}
+          onPress={() => navigateToSearch()}
+        >
+          <Text style={styles.textSearch}>Buscar usuário</Text>
+        </TouchableOpacity>
+      </View>
+      <Modal
+        visible={isVisible}
+        onRequestClose={() => setIsVisible(false)}
+        title="Remover paciente"
+        description="Por favor, confirme a remoção do usuário de sua lista de
+        pacientes."
+        options={[
+          {
+            name: 'Confirmar',
+            onPress: () => handleDelete(),
+          },
+        ]}
+      />
     </View>
   )
 }

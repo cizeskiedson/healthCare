@@ -8,7 +8,7 @@ import { Feather } from '@expo/vector-icons'
 import { Resume } from '../screens/Resume'
 import { History } from '../screens/History'
 import { Profile } from '../screens/Profile'
-import { ViewDoc2 } from '../screens/ViewDoc2'
+import { ViewDoc } from '../screens/ViewDoc'
 import { ProfileDoc } from '../screens/ProfileDoc'
 import { Search } from '../screens/Search'
 import { CreatePatient } from '../screens/CreatePatient'
@@ -54,7 +54,7 @@ const TabsDoctor = () => {
       })}
     >
       <>
-        <AppTab.Screen name="Pacientes" component={ViewDoc2} />
+        <AppTab.Screen name="Pacientes" component={ViewDoc} />
         <AppTab.Screen name="Perfil" component={ProfileDoc} />
       </>
     </AppTab.Navigator>
@@ -62,8 +62,8 @@ const TabsDoctor = () => {
 }
 
 const TabsPatient = () => {
-  console.log('start bluetooth module')
-  BluetoothModule()
+  /*  console.log('start bluetooth module')
+  BluetoothModule() */
   const route = useRoute()
   return (
     <AppTab.Navigator
@@ -250,62 +250,3 @@ export const AppRoutes = () => {
     </AppStack.Navigator>
   )
 }
-
-// export const AppRoutes = ({ id, realm }: AppProps) => {
-//   if (realm === 'pacient') {
-//     return (
-//       <Navigator
-//         screenOptions={({ route }) => ({
-//           tabBarActiveTintColor: 'purple',
-//           tabBarInactiveTintColor: '#92929C',
-//           tabBarStyle: {
-//             height: 60,
-//           },
-//           tabBarLabelStyle: {
-//             marginBottom: 6,
-//           },
-//           tabBarIcon: ({ color, size }) => {
-//             return (
-//               <Feather
-//                 name={icons[route.name] as keyof typeof Feather.glyphMap}
-//                 color={color}
-//                 size={size}
-//               />
-//             )
-//           },
-//         })}
-//       >
-//         <Screen name="Resumo" component={Resume} />
-//         <Screen name="Histórico" component={History} />
-//         <Screen name="Perfil" component={Profile} initialParams={{ id: id }} />
-//       </Navigator>
-//     )
-//   } else {
-//     return (
-//       <Navigator
-//         screenOptions={({ route }) => ({
-//           tabBarActiveTintColor: 'purple',
-//           tabBarInactiveTintColor: '#92929C',
-//           tabBarStyle: {
-//             height: 60,
-//           },
-//           tabBarLabelStyle: {
-//             marginBottom: 6,
-//           },
-//           tabBarIcon: ({ color, size }) => {
-//             return (
-//               <Feather
-//                 name={icons[route.name] as keyof typeof Feather.glyphMap}
-//                 color={color}
-//                 size={size}
-//               />
-//             )
-//           },
-//         })}
-//       >
-//         <Screen name="Pacientes" component={ViewDoc} />
-//         <Screen name="Perfil" component={ProfileDoc} />
-//       </Navigator>
-//     )
-//   }
-// }
