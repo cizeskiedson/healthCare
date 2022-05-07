@@ -18,6 +18,7 @@ import { CreateContact } from '../screens/CreateContact'
 import { colors } from '../styles/colors'
 import { useRoute } from '@react-navigation/native'
 import { BluetoothModule } from '../utils/bluetooth'
+import api from '../services/api'
 
 const AppTab = createBottomTabNavigator()
 const AppStack = createNativeStackNavigator()
@@ -62,8 +63,8 @@ const TabsDoctor = () => {
 }
 
 const TabsPatient = () => {
-  /*  console.log('start bluetooth module')
-  BluetoothModule() */
+  console.log('start bluetooth module')
+  BluetoothModule()
   const route = useRoute()
   return (
     <AppTab.Navigator
@@ -115,6 +116,8 @@ const TabsPatient = () => {
 
 const TabsConfident = () => {
   const route = useRoute()
+
+  console.log('PARAMS', route.params)
   return (
     <AppTab.Navigator
       screenOptions={({ route }) => ({
@@ -146,6 +149,11 @@ const TabsConfident = () => {
         <AppTab.Screen
           name="Histórico"
           component={History}
+          initialParams={route.params}
+        />
+        <AppTab.Screen
+          name="Perfil"
+          component={Profile}
           initialParams={route.params}
         />
       </>
@@ -225,7 +233,15 @@ export const AppRoutes = () => {
           }}
         />
       ) : (
-        <AppStack.Screen name="Home" component={TabsConfident} />
+        <AppStack.Screen
+          name="Home"
+          component={TabsConfident}
+          initialParams={{ email: user?.additionalProps1.emailPaciente }}
+          options={{
+            headerShown: true,
+            headerTitle: 'Dados do paciente',
+          }}
+        />
       )}
       <AppStack.Screen
         name="PatientData"
@@ -235,7 +251,10 @@ export const AppRoutes = () => {
       <AppStack.Screen
         name="Search"
         component={Search}
-        options={{ headerShown: true, headerTitle: 'Buscar usuário' }}
+        options={{
+          headerShown: true,
+          headerTitle: 'Buscar usuário',
+        }}
       />
       <AppStack.Screen
         name="CreatePatient"

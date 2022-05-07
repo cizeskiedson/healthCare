@@ -40,19 +40,20 @@ export const styles = StyleSheet.create({
     padding: 5,
   },
   inputActivity: {
-    padding: 5,
     fontSize: 50,
     fontFamily: 'sans-serif-medium',
   },
   textInBox: {
     flexDirection: 'row',
+    paddingHorizontal: 5,
   },
   textInBoxReverse: {
     flexDirection: 'row-reverse',
+    paddingHorizontal: 5,
   },
   activityText: {
     padding: 5,
-    paddingTop: 43,
+    paddingTop: 40,
     color: colors.darkGray,
     fontWeight: 'bold',
   },

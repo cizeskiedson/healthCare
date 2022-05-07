@@ -143,6 +143,7 @@ export type User = {
   realm: string
   username: string
   verificationToken: string
+  additionalProps1: { emailPaciente: string }
 }
 
 export type AuthContextProps = {

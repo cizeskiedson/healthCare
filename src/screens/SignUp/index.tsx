@@ -38,14 +38,25 @@ export const SignUp = () => {
   const requestNewUser = async (
     email: string,
     password: string,
-    realm: string
+    realm: string,
+    emailPaciente?: string
   ) => {
     try {
-      await api.post('signup', {
-        email,
-        password,
-        realm,
-      })
+      if (emailPaciente) {
+        console.log('EMAIL PACIENTE DO CONFIANCA', emailPaciente)
+        await api.post('signup', {
+          email,
+          password,
+          realm,
+          additionalProps1: { emailPaciente },
+        })
+      } else {
+        await api.post('signup', {
+          email,
+          password,
+          realm,
+        })
+      }
     } catch (error) {
       showMessage({
         message: 'Oops!',
@@ -171,7 +182,7 @@ export const SignUp = () => {
     try {
       console.log('hello')
       await requestNewUser(email, password, realm)
-      await requestNewUser(emailC, '123senha', 'temp')
+      await requestNewUser(emailC, '123senha', 'temp', email)
       await signIn(email, password)
       await requestNewPatient(
         name,

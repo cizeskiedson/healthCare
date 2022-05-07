@@ -12,6 +12,8 @@ export const ChangePassword = () => {
   const [isVisible, setIsVisible] = useState(false)
   const { user, signOut } = useAuth()
   const email = user?.email
+  const emailPaciente = user?.additionalProps1.emailPaciente
+  console.log('EMAIL PACIENTE', emailPaciente)
   const realm = 'confident'
 
   const handleSubmit = async () => {
@@ -22,6 +24,7 @@ export const ChangePassword = () => {
         email,
         password,
         realm,
+        additionalProps1: { emailPaciente: emailPaciente },
       })
       showMessage({
         message: 'Sucesso!',

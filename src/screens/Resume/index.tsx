@@ -31,19 +31,19 @@ export const Resume = () => {
     }
   }
 
-  /*   const setData = async () => {
+  const setData = async () => {
     try {
-      await AsyncStorage.setItem('@healthCare:steps', '20')
-      await AsyncStorage.setItem('@healthCare:fall', '1')
+      await AsyncStorage.setItem('@healthCare:steps', '21')
+      await AsyncStorage.setItem('@healthCare:fall', '2')
+      await AsyncStorage.removeItem('@healthCare:steps')
     } catch (error) {
       console.log(error)
     }
-  } */
+  }
 
   useEffect(() => {
     if (isFocused) {
-      /* 
-      setData() */
+      setData()
       getData()
     }
   }, [isFocused])
