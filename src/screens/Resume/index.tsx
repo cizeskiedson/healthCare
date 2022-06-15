@@ -21,7 +21,7 @@ export const Resume = () => {
     setLoading(true)
     try {
       setSteps(await AsyncStorage.getItem('@healthCare:steps'))
-      console.log('STEPS', steps)
+      console.log('STEPS AQUI', steps)
       setFall(await AsyncStorage.getItem('@healthCare:fall'))
       console.log('FALLS', fall)
       setDistance(JSON.stringify(0.82 * Number(steps)))
